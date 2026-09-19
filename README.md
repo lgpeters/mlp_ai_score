@@ -6,9 +6,11 @@
 Millenium/
 ├── .venv/              # One virtual environment for the whole repo
 ├── .vscode/            # Interpreter + debug config
-├── shared/             # Business logic shared across services
+├── shared/             # Business logic shared across services (db, EDGAR client, ...)
 ├── mcp-server/         # MCP server for Claude Desktop
-├── backend/            # (empty for now)
+├── pipelines/          # Data engineering entrypoints (universe load, SEC, news, ...)
+├── sql/                # Postgres schema, applied to Supabase
+├── notebooks/          # Exploratory notebooks
 ├── pyproject.toml      # Makes `shared` importable everywhere
 └── requirements.txt    # Third-party dependencies
 ```
