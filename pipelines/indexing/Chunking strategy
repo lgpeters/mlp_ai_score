@@ -1,0 +1,51 @@
+# Chunking strategy
+
+## Approach
+
+Each downloaded document (`content.storage_path`) is split into overlapping
+chunks using `langchain-text-splitters`' `RecursiveCharacterTextSplitter`.
+Only the chunk's position in the source text is stored — `start_offset` /
+`end_offset` into the markdown file already in Storage — not the chunk text
+itself (see `sql/0007_chunks.sql`). The actual text is sliced out on demand
+when a chunk is selected for the LLM, avoiding duplicating the whole corpus
+a second time in Postgres.
+
+## Size
+
+**1000 characters (~250 tokens) per chunk, 100 character (~10%) overlap.**
+
+This is a middle ground between two competing pressures:
+
+- Too large, and embeddings get diluted — a chunk covering several unrelated
+  topics produces a vector that's a blurry average of all of them, weakening
+  retrieval precision.
+- Too small, and the LLM doesn't get enough context to judge materiality or
+  valence — a bare sentence like "...in AI R&D" is uninterpretable without
+  the subject and numbers that were in the previous sentence. Since the
+  entire matched chunk (not a wider window) is what gets sent to the LLM for
+  scoring, the chunk itself needs to be roughly paragraph-sized to be
+  self-contained.
+
+## Why RecursiveCharacterTextSplitter over a naive fixed-width split
+
+A naive approach (slice every N characters, regardless of content) cuts
+mid-word and mid-sentence constantly. The practical fix most naive
+implementations reach for is *more overlap* — pad the boundary with enough
+duplicated text that whatever got cut in half in one chunk is likely intact
+in the next one. That works, but it's a blunt instrument: it inflates every
+chunk's size (and therefore total storage and embedding cost) to compensate
+for bad boundaries, rather than fixing the boundaries themselves.
+
+`RecursiveCharacterTextSplitter` instead tries a prioritized list of natural
+split points — paragraph breaks first, then sentence breaks, then word
+breaks — only falling back to a hard character cut if nothing better is
+available within the chunk size. In practice this means chunks almost always
+start and end on a real sentence or paragraph boundary. The result: a much
+smaller overlap (10%, vs. what a naive splitter would need to reliably avoid
+losing meaning at boundaries) still gives clean, self-contained chunks —
+less redundant text stored and embedded, for better chunk quality, not a
+tradeoff between the two.
+
+Offsets are returned natively (`add_start_index=True`), verified to slice
+back to the exact original chunk text — no need to re-locate chunks in the
+source document after the fact.

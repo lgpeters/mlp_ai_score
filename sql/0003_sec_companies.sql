@@ -1,0 +1,21 @@
+create table if not exists sec_companies (
+    cik                                 text primary key,
+    entity_type                        text,
+    sic                                 text,
+    sic_description                    text,
+    owner_org                          text,
+    name                               text,
+    tickers                            text[],
+    exchanges                          text[],
+    ein                                text,
+    lei                                text,
+    description                        text,
+    website                            text,
+    investor_website                   text,
+    category                           text,
+    fiscal_year_end                    text,
+    state_of_incorporation             text,
+    state_of_incorporation_description text,
+    former_names                       jsonb,
+    retrieved_at                       timestamptz not null default now()
+);

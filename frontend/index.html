@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Content Search</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+  .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  select, input, button { padding: 0.4rem; font-size: 0.9rem; }
+  #query { flex: 1; min-width: 200px; }
+  .columns { display: flex; gap: 2rem; }
+  .column { flex: 1; min-width: 0; }
+  .result { border: 1px solid #ddd; border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem; }
+  .meta { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; }
+  .markdown { max-height: 200px; overflow-y: auto; font-size: 0.85rem; }
+  h2 { font-size: 1rem; }
+</style>
+</head>
+<body>
+
+<h1>Content Search</h1>
+
+<div class="filters">
+  <select id="company"><option value="">All companies</option></select>
+  <select id="type"><option value="">All types</option></select>
+  <select id="sub_type"><option value="">All sub-types</option></select>
+  <input type="date" id="date_from">
+  <input type="date" id="date_to">
+</div>
+
+<div class="filters">
+  <input id="query" placeholder="Search text (embedded via FinLang)...">
+  <button onclick="runSearch()">Search</button>
+</div>
+
+<div id="status"></div>
+
+<div class="columns">
+  <div class="column">
+    <h2>Top 5 (most relevant)</h2>
+    <div id="top"></div>
+  </div>
+  <div class="column">
+    <h2>Bottom 5 (least relevant)</h2>
+    <div id="bottom"></div>
+  </div>
+</div>
+
+<script>
+async function loadFilters() {
+  const res = await fetch("/api/filters");
+  const data = await res.json();
+  for (const c of data.companies) addOption("company", c);
+  for (const t of data.types) addOption("type", t);
+  for (const s of data.sub_types) addOption("sub_type", s);
+}
+
+function addOption(selectId, value) {
+  const opt = document.createElement("option");
+  opt.value = value;
+  opt.textContent = value;
+  document.getElementById(selectId).appendChild(opt);
+}
+
+function renderResult(r) {
+  const div = document.createElement("div");
+  div.className = "result";
+  div.innerHTML = `
+    <div class="meta">${r.company_name} | ${r.type}${r.sub_type ? " / " + r.sub_type : ""} | ${r.publication_date ?? "no date"} | distance: ${r.distance.toFixed(4)}</div>
+    <div class="markdown">${marked.parse(r.markdown)}</div>
+  `;
+  return div;
+}
+
+async function runSearch() {
+  const status = document.getElementById("status");
+  status.textContent = "Searching...";
+
+  const body = {
+    query: document.getElementById("query").value,
+    company: document.getElementById("company").value,
+    type: document.getElementById("type").value,
+    sub_type: document.getElementById("sub_type").value,
+    date_from: document.getElementById("date_from").value,
+    date_to: document.getElementById("date_to").value,
+  };
+
+  const res = await fetch("/api/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+
+  status.textContent = `You searched over ${data.total_matched} of ${data.total_filtered} documents matching your filters`;
+
+  const topEl = document.getElementById("top");
+  const bottomEl = document.getElementById("bottom");
+  topEl.innerHTML = "";
+  bottomEl.innerHTML = "";
+  data.top.forEach(r => topEl.appendChild(renderResult(r)));
+  data.bottom.forEach(r => bottomEl.appendChild(renderResult(r)));
+}
+
+loadFilters();
+</script>
+
+</body>
+</html>

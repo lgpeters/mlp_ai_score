@@ -32,6 +32,11 @@ SPEAKER_BLOCK_RE = re.compile(
     r'|speakerName:"((?:[^"\\]|\\.)*)"'
 )
 
+# Legacy page format used by some older transcripts: the whole body as one
+# flat string instead of structured per-speaker blocks. No speaker
+# attribution available in this format, so it's used as-is (plain text).
+FULL_BODY_RE = re.compile(r'fullTranscriptBody:"((?:[^"\\]|\\.)*)"')
+
 
 class DownloadError(Exception):
     pass
@@ -89,7 +94,13 @@ def _extract_markdown(html: str) -> str:
             heading += f" ({role}{f', {company}' if company else ''})"
         parts.append(f"### {heading}\n\n" + "\n\n".join(paragraphs))
 
-    return "\n\n".join(parts)
+    if parts:
+        return "\n\n".join(parts)
+
+    # Fall back to the legacy flat-body format if no structured speaker
+    # blocks were found.
+    fallback = FULL_BODY_RE.search(html)
+    return _unescape(fallback.group(1)) if fallback else ""
 
 
 def download_one(content_id: str, url: str, ticker: str) -> None:
