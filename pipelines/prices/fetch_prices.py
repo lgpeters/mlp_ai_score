@@ -12,10 +12,12 @@ Stooq was evaluated as a second free source but its CSV endpoint is now
 behind a JavaScript bot-challenge that plain HTTP requests can't get
 through -- yfinance alone is what this pipeline uses.
 
-Also pulls a handful of reference series alongside the universe: three
+Also pulls a handful of reference series alongside the universe: two
 AI-themed ETFs as an off-the-shelf AI-exposure proxy (tracking their price
 directly, not their holdings -- ARK's funds were considered and
-explicitly ruled out), and the S&P 500 as a market benchmark.
+explicitly ruled out), and the S&P 500 as a market benchmark. A third ETF
+(IRBO) was tried and dropped -- genuinely delisted, zero price history at
+any date range, not a fetch bug.
 """
 
 import yfinance as yf
@@ -28,7 +30,6 @@ from shared.db import get_connection
 REFERENCE_TICKERS = [
     "BOTZ",   # Global X Robotics & Artificial Intelligence ETF
     "AIQ",    # Global X Artificial Intelligence & Technology ETF
-    "IRBO",   # iShares Robotics and Artificial Intelligence Multisector ETF
     "^GSPC",  # S&P 500
 ]
 
