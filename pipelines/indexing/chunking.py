@@ -1,7 +1,7 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from shared.db import get_connection
-from shared.storage import download_text
+from shared.storage import get_source_text
 
 CHUNK_SIZE_CHARS = 2000  # ~500 tokens
 OVERLAP_CHARS = 200  # ~10%
@@ -10,10 +10,13 @@ _splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE_CHARS, chunk_overlap=OVERLAP_CHARS, add_start_index=True
 )
 
+# hackernews rows never get a storage_path (no download step -- their
+# "document" is just their title, read directly rather than from Storage),
+# so they're included via the type check rather than the storage_path check.
 PENDING_SQL = """
-    select content_id, storage_path
+    select content_id, type, storage_path
     from content
-    where storage_path is not null and processed = false
+    where processed = false and (storage_path is not null or type = 'hackernews')
     order by publication_date desc
 """
 
@@ -32,8 +35,8 @@ MARK_PROCESSED_SQL = """
 """
 
 
-def get_pending() -> list[tuple[str, str]]:
-    """Returns [(content_id, storage_path), ...]."""
+def get_pending() -> list[tuple[str, str, str]]:
+    """Returns [(content_id, type, storage_path), ...]."""
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(PENDING_SQL)
@@ -48,8 +51,8 @@ def chunk_offsets(text: str) -> list[tuple[int, int]]:
     return [(d.metadata["start_index"], d.metadata["start_index"] + len(d.page_content)) for d in docs]
 
 
-def chunk_one(content_id: str, storage_path: str) -> int:
-    text = download_text(storage_path)
+def chunk_one(content_id: str, content_type: str, storage_path: str | None) -> int:
+    text = get_source_text(content_id, content_type, storage_path)
     offsets = chunk_offsets(text)  # in document order -- enumerate() gives a properly incremental chunk_index
 
     rows = [(f"{content_id}_{i}", content_id, i, start, end) for i, (start, end) in enumerate(offsets)]
@@ -75,10 +78,10 @@ def run(limit: int | None = None) -> None:
     print(f"{len(pending)} documents to chunk")
 
     total_chunks = 0
-    for content_id, storage_path in pending:
-        n = chunk_one(content_id, storage_path)
+    for content_id, content_type, storage_path in pending:
+        n = chunk_one(content_id, content_type, storage_path)
         total_chunks += n
-        print(f"  {storage_path}: {n} chunks")
+        print(f"  {storage_path or content_id}: {n} chunks")
 
     print(f"\n{len(pending)} documents chunked, {total_chunks} total chunks")
 

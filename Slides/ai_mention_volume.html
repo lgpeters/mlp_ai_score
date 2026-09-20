@@ -1,0 +1,223 @@
+<title>AI news</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F4F6F8; --panel:#FFFFFF; --ink:#151B23; --muted:#5B6B7A; --line:#DCE3E8;
+  --nvda:#4C8DFF; --intc:#2FB8C6; --mu:#6C6FF0; --dell:#8AA6C1;
+  --adbe:#C74FE0; --team:#F2A93B; --cat:#E0663D; --wm:#6FA85A;
+  --general:#E0B23D; --infra:#2C4870; --platform:#4C8577;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151B; --panel:#171D25; --ink:#EAF0F5; --muted:#8CA0B3; --line:#2A343E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151B; --panel:#171D25; --ink:#EAF0F5; --muted:#8CA0B3; --line:#2A343E;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans", system-ui, sans-serif;
+  padding-inline:24px; padding-block:36px 56px;
+}
+.wrap{max-width:920px; margin:0 auto; display:flex; flex-direction:column; gap:28px}
+.num, .tick, .legend .n, .legend .ticker{font-family:"IBM Plex Mono", "SF Mono", monospace; font-variant-numeric:tabular-nums}
+
+header{display:flex; flex-direction:column; gap:8px}
+h1{margin:0; font-size:1.7rem; font-weight:600; letter-spacing:-0.01em; text-wrap:balance}
+.sub{margin:0; color:var(--muted); font-size:0.92rem; max-width:65ch; line-height:1.5}
+.sub b{color:var(--ink); font-weight:500}
+
+.panel{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:20px clamp(12px,3vw,28px) 8px; overflow-x:auto;
+}
+svg{display:block; width:100%; height:auto; min-width:640px}
+.axis-label{fill:var(--muted); font-size:11px; font-family:"IBM Plex Mono", monospace}
+.gridline{stroke:var(--line); stroke-width:1}
+.bar-seg{stroke:var(--panel); stroke-width:1}
+.year-label{fill:var(--muted); font-size:11px; font-family:"IBM Plex Mono", monospace; text-anchor:middle}
+.total-label{fill:var(--ink); font-size:11px; font-family:"IBM Plex Mono", monospace; text-anchor:middle; font-weight:500}
+
+.legend{
+  display:flex; flex-wrap:wrap; gap:10px 18px; padding:2px 4px 4px;
+}
+.legend-item{display:flex; align-items:baseline; gap:7px; font-size:0.86rem}
+.swatch{width:9px; height:9px; border-radius:2px; display:inline-block; flex:none; transform:translateY(1px)}
+.legend .ticker{font-weight:500; color:var(--ink)}
+.legend .n{color:var(--muted); font-size:0.82rem}
+
+.section-title{margin:0; font-size:1.15rem; font-weight:600; letter-spacing:-0.01em}
+.comp-row{display:flex; align-items:center; gap:14px; margin-bottom:12px}
+.comp-row:last-child{margin-bottom:0}
+.comp-label{width:64px; flex:none; font-weight:500; font-size:0.95rem}
+.comp-track{flex:1; min-width:0}
+.comp-total{width:44px; flex:none; text-align:right; color:var(--muted); font-size:0.85rem}
+.comp-pct{fill:#fff; font-size:12px; font-family:"IBM Plex Mono", monospace; text-anchor:middle; font-weight:500}
+.comp-pct.dark-on-light{fill:var(--ink)}
+
+footer{color:var(--muted); font-size:0.8rem; line-height:1.6; border-top:1px solid var(--line); padding-top:14px}
+footer code{font-family:"IBM Plex Mono", monospace; font-size:0.78rem; background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 5px}
+
+@media (max-width:520px){
+  h1{font-size:1.4rem}
+  .panel{padding-inline:8px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>AI Mention Volume</h1>
+    <p class="sub">Hacker News stories per year that clear the cheap first-pass gate — <b>company_relevant = true</b> and <b>ai_associated &gt; 0</b> — stacked by company, 2015–2026. 2026 is partial (through September).</p>
+  </header>
+
+  <div class="panel">
+    <svg id="chart" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <header>
+    <p class="section-title">Composition by type: Nvidia vs Adobe</p>
+    <p class="sub">Same gate, split by <b>ai_associated</b> type — 1 General/Core&nbsp;AI, 2 Infra/Compute, 3 Platforms. Nvidia's signal is overwhelmingly infrastructure (GPUs, data centers, compute capacity); Adobe's is almost entirely core AI (product features like Firefly/Sensei).</p>
+  </header>
+
+  <div class="panel" style="padding-block:20px">
+    <div id="comparison"></div>
+  </div>
+
+  <div class="legend" id="type-legend"></div>
+
+  <footer>
+    Source: <code>chunk_classifications</code> joined to <code>content_index</code> / <code>content</code> / <code>companies</code>, scored by the Haiku cheap first pass over all 5,455 Hacker&nbsp;News chunks. PG has zero qualifying stories across the full period. Caterpillar's 4 apparent hits were manually corrected to <code>company_relevant=false</code> — all were homonym false positives (the insect/pop-culture "caterpillar", not Caterpillar&nbsp;Inc) — so CAT is omitted from both charts.
+  </footer>
+</div>
+
+<script>
+const DATA = {
+  2015:{ADBE:4,DELL:1,INTC:6,MU:1,NVDA:41},
+  2016:{ADBE:7,DELL:3,INTC:11,MU:4,NVDA:58,TEAM:1},
+  2017:{ADBE:11,DELL:2,INTC:10,MU:2,NVDA:68,TEAM:1},
+  2018:{ADBE:6,DELL:5,INTC:11,MU:12,NVDA:59},
+  2019:{ADBE:13,DELL:2,INTC:9,MU:1,NVDA:67},
+  2020:{ADBE:8,INTC:10,MU:7,NVDA:56},
+  2021:{ADBE:6,INTC:11,MU:2,NVDA:50,TEAM:1},
+  2022:{ADBE:9,DELL:4,INTC:8,MU:10,NVDA:55},
+  2023:{ADBE:34,DELL:7,INTC:14,MU:17,NVDA:79,TEAM:5,WM:1},
+  2024:{ADBE:38,DELL:15,INTC:14,MU:19,NVDA:78,TEAM:5},
+  2025:{ADBE:19,DELL:10,INTC:18,MU:8,NVDA:66,TEAM:7},
+  2026:{ADBE:16,DELL:10,INTC:19,MU:19,NVDA:63,TEAM:16},
+};
+
+const SERIES = [
+  {t:"NVDA", v:"--nvda"}, {t:"INTC", v:"--intc"}, {t:"MU", v:"--mu"}, {t:"DELL", v:"--dell"},
+  {t:"ADBE", v:"--adbe"}, {t:"TEAM", v:"--team"}, {t:"WM", v:"--wm"},
+];
+
+const COMPOSITION = {
+  NVDA: {1:278, 2:442, 3:20},
+  ADBE: {1:166, 2:1, 3:4},
+};
+const TYPES = [
+  {k:1, label:"General / Core AI", v:"--general"},
+  {k:2, label:"Infra / Compute", v:"--infra"},
+  {k:3, label:"Platforms", v:"--platform"},
+];
+
+const years = Object.keys(DATA).map(Number);
+const totals = years.map(y => SERIES.reduce((s,{t}) => s + (DATA[y][t]||0), 0));
+const maxTotal = Math.max(...totals);
+const niceMax = Math.ceil(maxTotal / 50) * 50;
+
+const W = 900, H = 460;
+const padL = 40, padR = 12, padT = 16, padB = 40;
+const plotW = W - padL - padR, plotH = H - padT - padB;
+const barW = plotW / years.length * 0.62;
+const gap = plotW / years.length;
+
+function colorOf(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
+function render(){
+  const svg = document.getElementById("chart");
+  const ticks = [0, niceMax*0.25, niceMax*0.5, niceMax*0.75, niceMax];
+  let s = "";
+
+  ticks.forEach(v => {
+    const y = padT + plotH - (v/niceMax)*plotH;
+    s += `<line class="gridline" x1="${padL}" x2="${W-padR}" y1="${y}" y2="${y}"/>`;
+    s += `<text class="axis-label" x="${padL-8}" y="${y+3}" text-anchor="end">${v}</text>`;
+  });
+
+  years.forEach((y, i) => {
+    const x = padL + gap*i + (gap-barW)/2;
+    let yOff = 0;
+    let total = 0;
+    SERIES.forEach(({t, v}) => {
+      const val = DATA[y][t] || 0;
+      if (val === 0) return;
+      total += val;
+      const segH = (val/niceMax)*plotH;
+      const segY = padT + plotH - yOff - segH;
+      s += `<rect class="bar-seg" x="${x}" y="${segY}" width="${barW}" height="${segH}" fill="${colorOf(v)}"/>`;
+      yOff += segH;
+    });
+    s += `<text class="year-label" x="${x+barW/2}" y="${padT+plotH+18}">${y}</text>`;
+    s += `<text class="total-label" x="${x+barW/2}" y="${padT+plotH-yOff-6}">${total}</text>`;
+  });
+
+  svg.innerHTML = s;
+}
+
+function renderLegend(){
+  const totalsByTicker = SERIES.map(({t,v}) => [t, v, years.reduce((s,y)=>s+(DATA[y][t]||0),0)])
+    .filter(([,,n]) => n > 0)
+    .sort((a,b) => b[2]-a[2]);
+  const el = document.getElementById("legend");
+  el.innerHTML = totalsByTicker.map(([t,v,n]) =>
+    `<span class="legend-item"><span class="swatch" style="background:${colorOf(v)}"></span><span class="ticker">${t}</span><span class="n">${n}</span></span>`
+  ).join("");
+}
+
+function renderComparison(){
+  const el = document.getElementById("comparison");
+  const trackW = 560, rowH = 34;
+
+  el.innerHTML = Object.entries(COMPOSITION).map(([ticker, counts]) => {
+    const total = TYPES.reduce((s,{k}) => s + (counts[k]||0), 0);
+    let x = 0;
+    const segs = TYPES.map(({k, v}) => {
+      const n = counts[k] || 0;
+      if (n === 0) return "";
+      const w = (n/total) * trackW;
+      const pct = Math.round((n/total)*100);
+      const seg = `<rect x="${x}" y="0" width="${w}" height="${rowH}" fill="${colorOf(v)}"/>` +
+        (w > 34 ? `<text class="comp-pct" x="${x+w/2}" y="${rowH/2+4}">${pct}%</text>` : "");
+      x += w;
+      return seg;
+    }).join("");
+    return `<div class="comp-row">
+      <span class="comp-label">${ticker}</span>
+      <span class="comp-track"><svg viewBox="0 0 ${trackW} ${rowH}" style="width:100%; height:${rowH}px; display:block">${segs}</svg></span>
+      <span class="comp-total num">${total}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderTypeLegend(){
+  const el = document.getElementById("type-legend");
+  el.innerHTML = TYPES.map(({label, v}) =>
+    `<span class="legend-item"><span class="swatch" style="background:${colorOf(v)}"></span><span class="ticker">${label}</span></span>`
+  ).join("");
+}
+
+render();
+renderLegend();
+renderComparison();
+renderTypeLegend();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+  render(); renderLegend(); renderComparison(); renderTypeLegend();
+});
+</script>

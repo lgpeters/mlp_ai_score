@@ -96,7 +96,7 @@ def search():
             "sub_type": row["sub_type"],
             "publication_date": row["publication_date"].isoformat() if row["publication_date"] else None,
             "distance": float(row["distance"]),
-            "markdown": get_chunk_content(row["storage_path"], row["start_offset"], row["end_offset"]),
+            "markdown": get_chunk_content(row["content_id"], row["type"], row["storage_path"], row["start_offset"], row["end_offset"]),
         }
 
     top = [serialize(r) for r in rows[:5]]

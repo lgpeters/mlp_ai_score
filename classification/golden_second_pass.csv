@@ -1,0 +1,913 @@
+source,ticker,company_name,chunk_id,publication_date,content,ai_category,ai_materiality_score,ai_saliency_score
+news,NVDA,Nvidia Corporation,89bd0583-0579-53c0-b833-4c631d6ce558_0,2023-11-24 15:29:23+00:00,Tesla turns on 10k-node Nvidia H100 Cluster,,,
+news,ADBE,Adobe Inc,9df517c3-55fe-5f8c-8fdc-4ca1107fdff2_0,2019-11-05 02:34:43+00:00,"Adobe, Twitter, NYT launch effort to fight deepfakes",,,
+news,NVDA,Nvidia Corporation,52500a3a-e4fc-53e2-babc-60a2fb21edc1_0,2022-01-10 16:29:19+00:00,Nvidia Research Plots a Course to Multiple Multichip GPU Engines,,,
+news,NVDA,Nvidia Corporation,9771328c-d3b3-559c-b192-97b2dfd773bc_0,2020-10-09 06:10:46+00:00,Nvidia Uses AI to Slash Bandwidth on Video Calls,,,
+news,NVDA,Nvidia Corporation,1c2c6dc7-7668-58cf-94e3-b620203a1d2c_0,2015-05-03 17:51:42+00:00,Assembler for Nvidia  Maxwell architecture,,,
+news,NVDA,Nvidia Corporation,6532f726-6a42-5468-b286-f62a9c4c5105_0,2016-02-05 00:10:28+00:00,Nvidia  GPUs Power First Self-Driving Shuttle,,,
+news,NVDA,Nvidia Corporation,02e21f4b-026f-5de0-a372-ba1f2432cc80_0,2016-06-20 10:29:10+00:00,Nvidia  Debuts PCIe-Based P100,,,
+news,NVDA,Nvidia Corporation,da958d54-6ff1-5632-ab81-f9a90e64bf83_0,2015-08-13 20:53:56+00:00,Nvidia  and IBM Cloud Support ImageNet Large Scale Visual Recognition Challenge,,,
+news,NVDA,Nvidia Corporation,92fd1556-b884-5e0c-88b0-21acda197600_0,2020-06-18 16:22:02+00:00,Nvidia CUDA support in Windows Subsystem for Linux 2 in insider preview,,,
+news,NVDA,Nvidia Corporation,4783206d-3c0f-5a06-8a74-e102473fa0ff_0,2017-12-08 04:10:57+00:00,Nvidia Introduces Titan V for Machine Learning Acceleration on the PC,,,
+news,NVDA,Nvidia Corporation,517d7b41-f5df-5895-bef1-3124d1bab5d1_0,2025-01-07 03:12:11+00:00,Nvidia announces next-gen RTX 5090 and RTX 5080 GPUs,,,
+news,ADBE,Adobe Inc,ae1df611-3a7a-57fa-91f4-d087c968d55e_0,2015-10-06 07:15:37+00:00,Adobe – Project Comet,,,
+news,INTC,Intel Corporation,be6358ab-1bb1-576d-a7a0-f2efcd46f920_0,2023-04-12 13:09:49+00:00,Intel Foundry Services and Arm announce collaboration on SoC design,,,
+news,NVDA,Nvidia Corporation,aef9e71e-7b50-5041-930f-8a31a49a96b8_0,2026-05-26 19:21:02+00:00,Trump's 25% cut on Nvidia chips to China backfired as Beijing blocks H200 sales,,,
+news,NVDA,Nvidia Corporation,e8af010f-5b35-54fe-aae4-f38de3aa370d_0,2018-12-04 02:30:03+00:00,Nvidia Uses AI to Render Virtual Worlds in Real Time,,,
+news,ADBE,Adobe Inc,786f028a-d46d-57fd-becf-72e4b55b275b_0,2026-09-07 18:18:08+00:00,Adobe ends an 18-year era as AI pressure mounts,,,
+news,INTC,Intel Corporation,8229088b-8837-56a7-9a76-1e3787d8aa65_0,2015-04-10 19:14:01+00:00,US blocks Intel from selling Xeon chips to Chinese supercomputer projects,,,
+news,NVDA,Nvidia Corporation,63995935-d1d6-5683-b2a1-2ac47d277e52_0,2025-03-31 13:08:54+00:00,Nvidia's latest AI PC boxes sound great – for data scientists with $3k to spare,,,
+news,INTC,Intel Corporation,5dbf69c9-f55e-5155-8ea5-44612bed4679_0,2016-07-23 18:06:54+00:00,Ask HN: Building a Deep Learning Workstation: Intel Phi and New Pascal Titan X?,,,
+news,NVDA,Nvidia Corporation,e6e9d66c-9ef2-5f38-8f50-cd3d1beda148_0,2024-03-31 00:34:07+00:00,Nvidia Is Simulating a Copy of the Earth,,,
+sec,NVDA,Nvidia Corporation,b13c800c-a470-5736-921c-7d9b41a171ad_55,2013-08-21 20:25:58+00:00,"During the first quarter of fiscal year 2014, we shipped GeForce GTX Titan for gamers, launched GRID VCA \- the industry's first visual computing appliance that enables businesses to deploy cloud\-based, GPU\-accelerated applications through any Windows, Linux or Mac client on their network, and shipped four new professional graphics products under our Quadro K Series \- extending our Kepler technology into the workstation market\.
+
+*Tegra Processor Business*
+
+During the second quarter of fiscal year 2014, we demonstrated the capabilities of the Kepler\-based GPU in Project Logan, our next\-generation mobile processor, prepared to release NVIDIA SHIELD, an open\-platform gaming and entertainment portable that began shipping on July 31, 2013, and demonstrated Tegra 4i making phone calls on AT&T's network\.
+
+During the first quarter of fiscal year 2014, we announced our first fully integrated 4G LTE mobile processor \- Tegra 4i\.
+
+*Stock Repurchase and Cash Dividends *
+
+Our Board of Directors authorized us, subject to certain specifications, to repurchase shares of our common stock up to an aggregate maximum amount of  $2\.7 billion  through May 2013 through December 2014\.",,,
+sec,ADBE,Adobe Inc,420cabe7-e6d5-5aab-a755-fd9d206825a8_81,2024-03-27 12:05:50+00:00,"Uncertainty around new and evolving AI use, including generative AI, may require additional investment to develop responsible use frameworks, develop or license proprietary datasets and machine learning models and develop new approaches and processes to attribute or compensate content creators, which could be costly\. Developing, testing and deploying AI systems may also increase the cost of our offerings, including due to the nature of the computing costs involved in such systems\. These costs could adversely impact our margins as we continue to add AI capabilities to our offerings and scale our AI offerings
+
+<u>Table of Contents</u>
+
+without assurance that our customers and users will adopt them\. Further, as with any new offerings based on new technologies, consumer reception and monetization pathways are uncertain, our strategies may not be successful and our business and financial results could be adversely impacted\. New AI offerings and technologies could disrupt workforce needs, result in negative publicity about AI and have the potential to affect demand for our existing products, services and solutions, all of which could adversely impact our business\.
+
+**We may not realize the anticipated benefits of investments or acquisitions, and they may disrupt our business and divert management’s attention\.**
+
+Investments and acquisitions involve numerous risks and uncertainties, the occurrence of which may have an adverse effect on our business\. These risks and uncertainties include:
+
+• inability to achieve the financial and strategic goals of the investment or acquisition;
+
+• difficulty in effectively integrating the operations, technologies, products, services, solutions, culture or personnel of the acquired business;
+
+• disruption of our ongoing business and distraction of our management and other personnel;",,,
+sec,CAT,Caterpillar Inc,f0c97245-c54a-5e86-aa22-71bb5a0ef6a2_148,2020-08-05 14:50:24+00:00,"| 16. | Resource Industries – A segment primarily responsible for supporting customers using machinery in mining, heavy construction, quarry and aggregates, waste and material handling applications. Responsibilities include business strategy, product design, product management and development, manufacturing, marketing and sales, and product support. The product portfolio includes large track-type tractors, large mining trucks, hard rock vehicles, longwall miners, electric rope shovels, draglines, hydraulic shovels, rotary drills, large wheel loaders, off-highway trucks, articulated trucks, wheel tractor scrapers, wheel dozers, landfill compactors, soil compactors, select work tools, machinery components, electronics and control systems, and related parts. In addition to equipment, Resource Industries also develops and sells technology products and services to provide customers fleet management, equipment management analytics and autonomous machine capabilities. Resource Industries also manages areas that provide services to other parts of the company, including integrated manufacturing and research and development. |
+
+Table of Contents
+
+| 17. | Restructuring Costs – May include costs for employee separation, long-lived asset impairments and contract terminations. These costs are included in Other operating (income) expenses except for defined-benefit plan curtailment losses and special termination benefits, which are included in Other income (expense). Restructuring costs also include other exit-related costs, which may consist of accelerated depreciation, inventory write-downs, building demolition, equipment relocation and project management costs and LIFO inventory decrement benefits from inventory liquidations at closed facilities, all of which are primarily included in Cost of goods sold. |
+| --- | --- |",,,
+sec,NVDA,Nvidia Corporation,64145f2b-5d8e-5f42-99f6-74af479f28a6_48,2014-08-20 20:27:59+00:00,"Our businesses are based on two technologies with a consistent underlying graphics architecture: the GPU and the Tegra processor\.
+
+GPUs, each with billions of transistors, are the engines of visual computing and among the world's most complex processors\. We have GPU product brands aimed at specific users and applications: GeForce for gamers; Quadro for designers; Tesla for researchers; and GRID for cloud\-based graphics\.
+
+| • | In gaming, GPUs enhance the gaming experience on PCs by improving the visual quality of graphics, increasing the frame rate for smoother gameplay and improving realism by replicating the behavior of light and physical objects. |
+
+
+
+
+
+
+
+| • | For designers, GPUs improve productivity and introduce new capabilities. For example, an architect designing a new building in a CAD package can interact with the model in real time, the model can be more detailed, and photo realistic renderings can be generated for the client. |
+
+| • | Researchers can use GPUs to run their simulations faster while consuming less power, increasing the accuracy of weather forecasts, or pricing financial derivatives more quickly. |
+
+| • | GRID uses GPUs to deliver graphics performance remotely, from the cloud. Uses include gaming, professional applications provided as a service (SaaS) and improving Citrix and VMware installations. |
+
+The Tegra processor is a SOC integrating an entire computer on a single chip\. Tegra processors incorporate GPUs and multi\-core CPUs together with audio, video and input/output capabilities\. They can also be integrated with baseband processors to add voice and data communication\. Our Tegra SOC conserves power while delivering state\-of\-the\-art graphics and multimedia processing\.",,,
+sec,ADBE,Adobe Inc,88102f8a-34cb-5b4d-92fe-8a847b6c9a4d_11,2021-01-15 21:03:42+00:00,"Adobe continues to redefine the creative process with Creative Cloud so that our customers can obtain everything they need to create, collaborate and be inspired\. One part of our strategy is Adobe Sensei, a proprietary framework and set of intelligent services for dramatically improving the design and delivery of digital experiences\. Adobe Sensei leverages Adobe’s massive content and data assets, as well as its deep domain expertise in the creative, marketing and document segments, within a unified AI and machine learning framework to help customers discover hidden opportunities, reduce tedious processes and offer relevant experiences to every customer\.",,,
+sec,NVDA,Nvidia Corporation,13f004dc-182c-5318-b3af-1f78b304fe6f_11,2024-02-21 21:36:57+00:00,"The world’s leading cloud service providers, or CSPs, and consumer internet companies use our data center\-scale accelerated computing platforms to enable, accelerate or enrich the services they deliver to billions of end users, including AI solutions and assistants, search, recommendations, social networking, online shopping, live video, and translation\.
+
+Enterprises and startups across a broad range of industries use our accelerated computing platforms to build new generative AI\-enabled products and services, or to dramatically accelerate and reduce the costs of their workloads and workflows\. The enterprise software industry uses them for new AI assistants and chatbots; the transportation industry for autonomous driving; the healthcare industry for accelerated and computer\-aided drug discovery; and the financial services industry for customer support and fraud detection\.
+
+<u>Table of Contents</u>
+
+Researchers and developers use our computing solutions to accelerate a wide range of important applications, from simulating molecular dynamics to climate forecasting\. With support for more than 3,500 applications, NVIDIA computing enables some of the most promising areas of discovery, from climate prediction to materials science and from wind tunnel simulation to genomics\. Including GPUs and networking, NVIDIA powers over 75% of the supercomputers on the global TOP500 list, including 24 of the top 30 systems on the Green500 list\.
+
+Gamers choose NVIDIA GPUs to enjoy immersive, increasingly cinematic virtual worlds\. In addition to serving the growing number of gamers, the market for PC GPUs is expanding because of the burgeoning population of live streamers, broadcasters, artists, and creators\. With the advent of generative AI, we expect a broader set of PC users to choose NVIDIA GPUs for running generative AI applications locally on their PC, which is critical for privacy, latency, and cost\-sensitive AI applications\.",,,
+sec,ADBE,Adobe Inc,07e4ca0b-b8ee-5e41-9728-c48c896ffe2a_17,2026-01-15 22:01:55+00:00,"*Adobe Acrobat*
+
+Adobe Acrobat is our comprehensive PDF solution with a full set of tools to convert, edit, share and sign PDFs across various surfaces and platforms\. Acrobat enables automated, collaborative workflows with a rich set of commenting, editing and sharing tools and direct integration with Adobe Acrobat Sign\. With the Acrobat Standard plan, subscribers can convert, edit, request signatures, and protect PDFs\. The Acrobat Pro plan offers additional advanced PDF features\.
+
+*Adobe Acrobat Reader*
+
+Adobe Acrobat Reader, our free software for reliable viewing, annotating and printing of PDF documents on a variety of surfaces and platforms, offers features to create, edit, export, combine, share and collaborate on PDF documents, including the “Liquid Mode” feature that automatically reformats PDFs for quick navigation and consumption on mobile devices\.
+
+<u>Table of Contents</u>
+
+*Adobe Express*
+
+Adobe Express is our all\-in\-one AI content creation app for users of any level, such as novice content creators and communicators, to easily create video, marketing, and social content\. Users can easily design high\-impact design elements, engaging videos and images, resumes, PDFs, animation and content ready for social media channels and platforms\. Adobe Express integrates with other Adobe solutions allowing customers to accelerate, streamline and scale on\-brand content creation\.
+
+### Creative & Marketing Professionals
+
+*Adobe Creative Cloud Pro*
+
+Adobe Creative Cloud Pro is a cloud\-based subscription to an ecosystem of apps that enables creative professionals and enthusiasts alike to express themselves and collaborate with apps and services for photography, design, video, social media, and more that connect across surfaces, platforms and geographies\. Subscribers have access to cloud storage to easily sync, access, collaborate and share their work, files and assets\.",,,
+sec,NVDA,Nvidia Corporation,c468e666-a298-505b-9a26-045b9128d2bd_18,2020-02-20 21:38:18+00:00,"NVIDIA DRIVE can perceive and understand in real\-time what's happening around the vehicle, precisely locate itself on an HD map, and plan a safe path forward\. This advanced self\-driving car platform combines deep learning, sensor fusion, and surround vision to change the driving experience\. Our DRIVE platform scales from a palm\-sized, energy\-efficient module for automated highway\-driving capabilities to a configuration with multiple systems aimed at enabling driverless cars\. Our Xavier SoC, which started shipping in 2018, enables vehicles to use deep neural networks to process data from multiple cameras and sensors\. It powers the DRIVE AutoPilot, NVIDIA’s Level 2\+ automated driving solution, combining the DRIVE AV self\-driving solution with the DRIVE IX cockpit software, including a visualization system for allowing the driver to see what the car sees and plans to do\. In fiscal year 2020, we announced our next\-generation SoC, Orin, targeting mass production in 2022\.
+
+**Business Strategies**
+
+### NVIDIA’s key strategies that shape our overall business approach include:
+
+**Advancing the GPU computing platform\.**  The massive parallel processing capabilities of NVIDIA GPUs can solve complex problems in significantly less time and with lower power consumption than alternative computational approaches\. Indeed, GPUs can help solve problems that were previously deemed unsolvable\. We work to deliver continued GPU performance leaps that outpace Moore’s Law by leveraging innovation across the architecture, chip design, system, and software layers\. Our strategy is to target markets where GPUs deliver order\-of\-magnitude performance advantages relative to legacy approaches\. Our market platforms so far include Gaming, Professional Visualization, Data Center, and Automotive\. While
+
+**Table of Contents**",,,
+sec,DELL,Dell Inc,f0344c9f-1242-5b96-bcf3-9bfd6bd09a80_87,2025-09-08 20:06:32+00:00,"**Unless otherwise indicated, all results presented are prepared in a manner that complies, in all material respects, with generally accepted accounting principles in the United States of America \(“GAAP”\)\. Unless otherwise indicated, all changes identified for the current\-period results represent comparisons to results for the prior corresponding fiscal period\.**
+
+**Unless the context indicates otherwise, references in this report to “we,” “us,” “our,” the “Company,” and “Dell Technologies” mean Dell Technologies Inc\. and its consolidated subsidiaries\.**
+
+**Our fiscal year is the 52\- or 53\-week period ending on the Friday nearest January 31\. We refer to our fiscal year ending January 30, 2026 as “Fiscal 2026,” and our fiscal year ended January 31, 2025 as “Fiscal 2025\.” Fiscal 2026 and Fiscal 2025 include 52 weeks\.**
+
+**INTRODUCTION**
+
+**Company Overview**
+
+Dell Technologies is a leader in the global technology industry focused on providing broad and innovative technology solutions for the data and artificial intelligence \(“AI”\) era\. We build and offer solutions ranging from client devices and peripherals to infrastructure solutions across servers, networking, and storage to meet the evolving needs of our customers and drive better business outcomes\. With our extensive portfolio and our commitment to innovation, we offer secure, integrated solutions that extend from the edge to the core to the cloud, and we are at the forefront of AI, software\-defined, and cloud native infrastructure solutions\. Our vision is to become the most essential technology partner\. We intend to realize our vision by executing our strategy of leveraging our strengths to extend our leadership positions and capture new growth\.
+
+We are organized into two business units which are also our reportable segments: Infrastructure Solutions Group and Client Solutions Group\.
+
+•
+
+### Infrastructure Solutions Group (“ISG”)",,,
+sec,INTC,Intel Corporation,0eca38bc-1c5d-56cc-8aba-42ca6693b303_75,2021-10-22 00:36:01+00:00,"| MD&A | 28 |
+
+**Table of Contents**
+
+Internet of Things
+
+More industries are harnessing the power of data to create business value, innovate, and grow\. This requires that intelligence move closer to the edge, allowing data to be acted on where it is created\. Working with our partners, we are using our architecture, accelerators, and software to develop and scale a growing Internet of Things portfolio and ecosystem\. Our Internet of Things portfolio is comprised of our IOTG and Mobileye businesses\.
+
+IOTG develops high\-performance compute platforms that solve for technology and business use cases that can scale across vertical industries and embedded markets\. Our customers include retailers, manufacturers, health and life sciences, governments, and education providers\. We reduce complexity in the ecosystem with a common architecture and software to help enable our customers to create and process data at the edge to analyze it faster and to act on it sooner\.
+
+Mobileye is the global leader in driving assistance and self\-driving solutions\. Our product portfolio employs a broad set of technologies, covering computer vision and machine learning\-based sensing, data analysis, localization, mapping, and driving policy technology for ADAS and AVs\. Mobileye's ADAS products form the building blocks for higher levels of autonomy\. Our customers and strategic partners include major global OEMs, Tier 1 automotive system integrators, fleet managers, and transportation operators\.
+
+| Internet of Things Revenue $B | Internet of Things Operating Income $B |
+
+![intc-20210925_g11.jpg](https://www.sec.gov/Archives/edgar/data/50863/000005086321000038/intc-20210925_g11.jpg) ![intc-20210925_g12.jpg](https://www.sec.gov/Archives/edgar/data/50863/000005086321000038/intc-20210925_g12.jpg)
+
+| ■ IOTG | ■ Mobileye | ■ IOTG | ■ Mobileye |
+| --- | --- | --- | --- |
+
+| Revenue and Operating Income Summary |
+
+| Q3 2021 vs. Q3 2020 |
+| --- |",,,
+sec,ADBE,Adobe Inc,bb5aef7d-d99f-5639-841b-44188f435b0f_88,2025-09-24 20:03:30+00:00,"**Issues relating to the development and use of AI in our offerings may result in reputational harm, liability and adverse financial results\.**
+
+Social, ethical and operational issues relating to the use of AI, including generative AI and agentic AI, in our offerings may result in reputational harm, liability and additional costs\. We are increasingly incorporating AI technologies, developed by us and by third parties, into many of our offerings\. If our AI development, deployment, content labeling or governance is ineffective or inadequate, it may result in incidents that impair the public acceptance of AI solutions or cause harm to individuals, customers or society, or result in our offerings not working as intended or producing unexpected outcomes\.",,,
+sec,NVDA,Nvidia Corporation,70b70835-b4ba-5298-ab9f-53b4b95b7732_73,2022-05-27 20:21:55+00:00,"Geopolitical tensions and conflicts worldwide, including but not limited to Taiwan, China, Hong Kong, Israel and Korea where the manufacture of our product components and final assembly of our products are concentrated, may result in changing regulatory requirements, trade policies, export controls, import duties and economic disruptions that could impact our operating strategies, product demand, access to global markets, hiring, and profitability\. The increasing focus on the strategic importance of AI technologies may result in additional regulatory restrictions that target products and services capable of enabling or facilitating AI, including some or all of our product and service offerings\. Such restrictions could include additional unilateral or multilateral export controls on certain products or technology, prohibiting us from exporting those products to customers in one or more markets, including but not limited to China, or could impose other conditions that limit our ability to serve demand abroad and could negatively impact our business and financial results\. Export controls may be imposed on our technology, products, or services even though competitors are not subject to similar restrictions, creating a competitive disadvantage for us and negatively impacting our business and financial results\. Increasing use of economic sanctions may also impact demand for our products or services, negatively impacting our business and financial results\. Deemed export control limitations could negatively impact the ability of our research and development teams to execute our roadmap or other objectives in a timely manner\.",,,
+sec,ADBE,Adobe Inc,88102f8a-34cb-5b4d-92fe-8a847b6c9a4d_26,2021-01-15 21:03:42+00:00,"During the second quarter of fiscal 2020, we began to discontinue our transaction\-driven Advertising Cloud offerings, allowing us to focus our investment on strategic growth initiatives\. We continue to offer our Advertising Cloud software solutions, but they are not expected to be areas of revenue growth\. In the fourth quarter of fiscal 2020, we moved our Advertising Cloud offerings from our Digital Experience segment into our Publishing and Advertising segment, in order to more closely align our Digital Experience business with the strategic growth opportunity\.
+
+We believe the AI and machine learning framework enabled by our strategy with Adobe Sensei enhances the delivery of digital experiences\. Adobe Experience Cloud offers domain\-specific AI services powered by Adobe Sensei that work with Adobe Experience Platform to augment existing Experience Cloud product offerings\. These AI services help provide domain\-specific intelligence in areas such as attribution and automated insights, customer journey management, lead management, sentiment analysis, one\-click personalization, enhanced anomaly detection and more\. By building on existing features and these AI\-powered services, we believe Adobe Sensei will increase the value we provide our customers and create a competitive differentiation in the market\.",,,
+sec,NVDA,Nvidia Corporation,452f2855-0328-5fdd-a2d6-cd4793fb1528_49,2018-08-16 20:31:19+00:00,"During the first quarter of fiscal year 2019, we introduced the NVIDIA DRIVE Constellation server with DRIVE Sim software, a complete system to safely test drive autonomous vehicles over billions of miles in virtual reality by leveraging NVIDIA GPUs and NVIDIA DRIVE Pegasus\.
+
+**Financial Information by Business Segment and Geographic Data**
+
+Refer to  ### Note 1 5 of the Notes to Condensed Consolidated Financial Statements for disclosure regarding segment information\.
+
+**Results of Operations**
+
+The following table sets forth, for the periods indicated, certain items in our Condensed Consolidated Statements of Income expressed as a percentage of revenue\.
+
+|  | July 29,   2018 |  | July 30,   2017 |  | July 29,   2018 |  | July 30,   2017 |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Revenue | 100.0 | % | 100.0 | % | 100.0 | % | 100.0 | % |
+| Cost of revenue | 36.7 |  | 41.6 |  | 36.1 |  | 41.2 |  |
+| Gross profit | 63.3 |  | 58.4 |  | 63.9 |  | 58.8 |  |
+| Operating expenses |  |  |  |  |  |  |  |  |
+| Research and development | 18.6 |  | 18.7 |  | 17.8 |  | 19.8 |  |
+| Sales, general and administrative | 7.7 |  | 8.9 |  | 7.4 |  | 9.2 |  |
+| Total operating expenses | 26.3 |  | 27.6 |  | 25.2 |  | 29.0 |  |
+| Income from operations | 37.0 |  | 30.9 |  | 38.7 |  | 29.8 |  |
+| Interest income | 1.0 |  | 0.7 |  | 0.9 |  | 0.7 |  |
+| Interest expense | (0.4 | ) | (0.7 | ) | (0.5 | ) | (0.7 | ) |
+| Other, net | 0.2 |  | (0.2 | ) | 0.2 |  | (0.5 | ) |
+| Total other income (expense) | 0.8 |  | (0.2 | ) | 0.6 |  | (0.5 | ) |
+| Income before income tax | 37.8 |  | 30.7 |  | 39.3 |  | 29.3 |  |
+| Income tax expense | 2.5 |  | 4.5 |  | 2.3 |  | 3.1 |  |
+| Net income | 35.3 | % | 26.2 | % | 37.0 | % | 26.2 | % |
+
+**Revenue**
+
+**Revenue by Reportable Segments**",,,
+sec,MU,Micron Technology Inc,89fad4ec-160b-5090-bba4-56f33f5333d5_5,2025-06-25 22:50:42+00:00,"This Form 10\-Q contains trend information and other forward\-looking statements that involve a number of risks and uncertainties\. Such forward\-looking statements may be identified by words such as “anticipate,” “expect,” “intend,” “pledge,” “committed,” “plan,” “opportunities,” “future,” “believe”, “target,” “on track,” “estimate,” “continue,” “likely,” “may,” “will,” “would,” “should,” “could,” and variations of such words and similar expressions\. However, the absence of these words or similar expressions does not mean that a statement is not forward\-looking\. Specific forward\-looking statements include, but are not limited to, statements regarding expected production ramp of certain products; plans to invest in research and development, including the plans to implement EUV lithography; anticipated technological developments; potential change and impact in our effective tax rate; the timing for construction, expansion, and ramping of production for our facilities, including new memory manufacturing fabs in the United States; receipt, timing, and utilization of government incentives and our ability to satisfy conditions attached to these incentives; the payment of future cash dividends; market conditions and profitability in our industry; future demand for our products and factors that may impact such demand, including developments in AI; DRAM bit shipments in future periods; actions to align our NAND supply and the pace of ramp of our new technology node, fab utilization and inventories with industry demand trends; the impact of the Cyberspace Administration of China \(“CAC”\) decision; capital spending in 2025; the potential impact of business, economic, political, legal and regulatory developments upon our global operations, including tariffs and trade regulations; and the sufficiency of our cash and investments\. Our actual results could differ materially from our historical results and those discussed in the forward\-looking statements\. Factors that",,,
+sec,MU,Micron Technology Inc,8621c96b-f690-58b0-b238-f625b3fe0b84_3,2022-06-30 21:47:52+00:00,"| Media Inquiries
+mediarelations@micron.com
+Government Inquiries
+govaffairs@micron.com
+Investor Inquiries
+investorrelations@micron.com |  | Global Product Portfolio |
+|  | DRAM | NAND | NOR | Solid-State Drives | Graphics and High Bandwidth",,,
+sec,NVDA,Nvidia Corporation,e0c35d06-f4cf-56d9-84a6-4049fd8c39a6_92,2025-11-19 21:36:17+00:00,"Such restrictions could include additional unilateral or multilateral export controls on certain products or technology, including but not limited to AI technologies\. As geopolitical tensions have increased, semiconductors associated with AI, including GPUs and related products, are increasingly the focus of export control restrictions proposed by stakeholders in the U\.S\. and its allies\. The United States has imposed unilateral worldwide controls restricting GPUs and associated products, and it is likely that additional unilateral or multilateral controls will be adopted\. Such controls have been and may again be very broad in scope and application, prohibit us from exporting our products to any or all customers in one or more markets, and could negatively impact our manufacturing, testing and warehousing locations and options, or could impose other conditions that limit our ability to serve demand abroad and could negatively and materially impact our business, revenue and financial results\. Export controls and other restrictions targeting GPUs and semiconductors associated with AI, which have been imposed and are likely to be more restrictive, would further limit our ability to export our technology, products, or services, creating a competitive disadvantage for us and negatively impacting our business and financial results\. Export controls targeting GPUs and semiconductors associated with AI have subjected and may in the future subject downstream users of our products to restrictions on the use, resale, repair, or transfer of our products, negatively impacting our business and financial results\. Controls could negatively impact our cost and/or ability to provide services such as NVIDIA AI cloud services and could impact the cost and/or ability for our CSPs and customers to provide services to their end customers, even outside China\.",,,
+sec,MU,Micron Technology Inc,22afdd6c-069b-52e0-8530-9b4cab83b2bd_117,2026-03-18 23:00:06+00:00,"• fluctuations in stock price; and
+
+• the terms of our product warranties or from product liability claims\.
+
+As we continue to focus on developing system solutions with manufacturers of consumer products, including autonomous driving, augmented reality, humanoid robots, AI, and others, we may be exposed to greater potential for personal liability claims against us as a result of consumers’ use of those products\. We, our officers, or our directors have been and could continue to be subject to claims of alleged violations of securities laws\.
+
+Expansion of our production capacity is subject to inherent safety risks for our employees and contractors\. Expansion and renovation activities may involve accidents, which could result in project delays, litigation, claims or disputes by our contractors and others, as well as increased insurance costs\. While the risks of our construction projects are covered by insurance and contractual indemnities from our contractors, we may not have insurance coverage or rights to indemnity for all risks\. Additionally, while we maintain insurance coverage for certain claims and liabilities, there can be no assurance that we are adequately insured to protect against all claims and potential liabilities, and we may elect to self\-insure with respect to certain matters\.
+
+Exposures to various legal proceedings and claims, with or without merit, could require significant attention from our management and could lead to significant costs and expenses as we defend claims, are required to pay damage awards, or enter into settlement agreements, any of which could have a material adverse effect on our business, results of operations, or financial condition\.",,,
+sec,NVDA,Nvidia Corporation,6f604f3a-8799-5077-9f12-2124b4535a92_62,2020-11-18 21:35:57+00:00,"2020 |  | October 27,
+
+
+2019 |  | $
+
+
+Change |  | %
+
+
+Change |  | October 25,
+
+
+2020 |  | October 27,
+
+
+2019 |  | $
+
+
+Change |  | %
+
+
+Change |  |
+|  | ($ in millions) |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Graphics | $ | 2,787 | $ | 2,226 | $ | 561 | 25 | % | $ | 6,778 | $ | 5,555 | $ | 1,223 | 22 | % |
+| Compute & Networking | 1,939 |  | 788 |  | 1,151 |  | 146 | % | 4,894 |  | 2,258 |  | 2,636 |  | 117 | % |
+| Total | $ | 4,726 | $ | 3,014 | $ | 1,712 | 57 | % | $ | 11,672 | $ | 7,813 | $ | 3,859 | 49 | % |
+
+### Graphics -
+
+ Graphics segment revenue for the third quarter of fiscal year 2021 compared to the third quarter of fiscal year 2020 increased by 25% and revenue for the first nine months of fiscal year 2021 compared to the first nine months of fiscal year 2020 increased by 22%\. These increases reflect growth in GeForce GPUs and game console SOCs, partially offset by lower sales of Quadro workstations\.
+
+### Compute & Networking -
+
+Compute & Networking segment revenue for the third quarter of fiscal year 2021 compared to the third quarter of fiscal year 2020 increased by 146% and revenue for the first nine months of fiscal year 2021 compared to the first nine months of fiscal year 2020 increased by 117%\. These increases reflect the addition of Mellanox acquired on April 27, 2020 and the continued ramp of NVIDIA Ampere GPU architecture systems and new products, partially offset by lower autonomous driving development agreement revenue\.
+
+**Concentration of Revenue **
+
+Revenue from sales to customers outside of the United States accounted for 81% and 80% of total revenue for the third quarter and first nine months of fiscal year 2021, respectively, and 92% of total revenue for the third quarter and first nine months of fiscal year 2020\. Revenue by geographic region is allocated to individual countries based on the location to which the products are initially billed even if the revenue is attributable to end customers in a different location\.",,,
+sec,ADBE,Adobe Inc,07e4ca0b-b8ee-5e41-9728-c48c896ffe2a_18,2026-01-15 22:01:55+00:00,"Creative Cloud Pro includes the Adobe Firefly web app, the premium version of Adobe Express, and AI\-powered features natively integrated throughout Adobe Photoshop, Adobe Illustrator and Adobe Premiere Pro\. All apps listed below and many more are available through subscriptions to Creative Cloud Pro \(except Substance 3D Apps, which are sold separately through the Adobe Substance 3D Collection plan\), and many of our apps are also available as standalone subscriptions on Adobe\.com\.
+
+*Adobe Photoshop and Lightroom*
+
+Adobe Photoshop is the world’s most advanced digital imaging and design app, with powerful editing and effects tools to transform photos\. Adobe Lightroom is our cloud\-based photo app that allows subscribers to edit, organize, store and share photos across desktop, tablet, mobile devices and the web\. In addition to individual subscriptions to Photoshop and Lightroom, we offer a Photography Plan for photographers and photo enthusiasts and includes Photoshop, Lightroom and Lightroom Classic\.
+
+*Adobe Illustrator*
+
+Adobe Illustrator is our industry\-standard vector graphics app used worldwide by designers of all types who want to create digital graphics and illustrations for all kinds of media—print, web, interactive, video and mobile—from web and mobile graphics to product packaging to book illustrations and billboards\.
+
+*Adobe Premiere Pro*
+
+Adobe Premiere Pro is a nonlinear video editing app used by filmmakers, TV editors, YouTubers and videographers\. Our customers can import and combine various types of media, from video shot on a mobile device to 8K to virtual reality, and then edit in its native format without transcoding\. Automated tools and workflows for color, graphics, audio and immersive 360/VR make the editing process more efficient\.
+
+*Adobe After Effects*",,,
+transcripts,DELL,Dell Inc,6ebc8da9-167f-538b-ae69-4e4015d9bba3_22,2025-05-29 00:00:00+00:00,"Lots of data.
+
+In that case, it is an object file system and serving up that information quite fast to the computational engines to make the recommendation.
+
+I think the same thing happens when we talk about large data sets and enterprises being consumed by AI inference, which ultimately becomes AI inference reasoning, which ultimately becomes agentic technology going forward.
+
+I am very optimistic about the storage opportunities on enterprise.
+
+These fast subsystems, whether that is a true parallel file system like Project Lightning that is designed for AI first, what we have done with our PowerScale, ObjectScale, building up the portfolio, the number of announcements we made last week, we are building the high-performance file systems and storage systems in this disaggregated storage world where it has really moved to a flexible, agile, high-performance storage system to meet the needs of these AI workloads. That is what we are building. That is what we are focused on.
+
+You got a big glimpse of it last week at Dell Technologies World.
+
+Back to the attach conversation, we think that's the bridge for us to continue to improve our attach rate going forward.
+
+Thanks, Krish.
+
+### Operator
+
+We'll take a question from David Vogt with UBS.
+
+### David Vogt (Managing Director and Senior Equity Analyst, UBS)
+
+Great.
+
+Thanks, guys, for taking my question.
+
+Jeff, on AI, to keep it very simple, what is the type of demand that you're seeing in the quarter from an order perspective and what you're shipping?
+
+The reason I'm asking is you've got this fairly well-documented GPU transition out there that has sort of plagued maybe some of your competitors.
+
+What are you doing differently?
+
+What are you seeing from customers?
+
+When you think about that backlog that you're sitting at at $14.4 billion, how would you characterize sort of the flavor of that backlog from a technology perspective?
+
+Thank you.
+
+### Jeff Clarke (Vice Chairman and COO, Dell Technologies)",,,
+transcripts,ADBE,Adobe Inc,33936398-9bed-5574-b096-d8d6e3a44044_20,2025-09-11 00:00:00+00:00,"We're very conservative there in terms of what we do for the users.
+
+That exceeded $5 billion.
+
+I think as it relates to the second part, which is AI-first, Firefly Services, Gen Studio, the overarching Gen Studio solution is definitely seeing a lot of great adoption, AI Assistant and Acrobat, and everything that we're doing associated with AI Acrobat.
+
+I always worry, Brad, when I give one or two products, then the other teams will feel that I don't love them a lot here within the company.
+
+Really, across all of them, we've seen significant momentum and easily crossed the $250 million mark.
+
+I'm really pleased with how that is.
+
+The North Star, clearly for us, is we want AI-infused in every dollar of revenue that we're providing, and I think we're doing a great job against that.
+
+### Keith Weiss (Analyst, Morgan Stanley)
+
+Great to hear.
+
+Thank you so much, Shantanu.
+
+### Operator
+
+Moving on to Brent Bracelin with Jefferies.
+
+Hi, thank you.
+
+This is John Jansworder for Brent Thill.
+
+I have two questions.
+
+I'm just wondering if you could shed a little bit of light on the mix of the AI credit usage between your own Firefly-based solution and third party, whether you're seeing any pickup from the third-party models and how users are responding.
+
+On the LLM Optimizer, I'm wondering whether you've used that Adobe internally and any impact on the top of funnel and conversion.
+
+Thank you.
+
+### David Wadhwani (President of Digital Media, Adobe)
+
+Yeah, thanks for the question.
+
+On the question of third-party models, our strategy, of course, as I mentioned earlier, is to provide choice so that any model you want to get access to ultimately is available in one place, but also deeper integration.
+
+That becomes the core foundation of everything we do.
+
+What we're seeing in terms of how it plays out in the market is there is so much announcement and sort of opportunity that's coming out with all the changes.
+
+We all see it every single day.",,,
+transcripts,INTC,Intel Corporation,0f6b70e5-9ad4-5b29-9b2c-c734b23527b7_5,2016-07-01 00:00:00+00:00,"Today, we are standing at the brink of a new revolution fueled by artificial intelligence and robotics.
+
+We recognize that the car is the ideal platform for developing the technology of the future, a future driven by machine perception that reaches human capabilities and beyond, and of machine intelligence capable of making split-second decisions in complex driving situations, and when combined together, produce a self-driving car.
+
+Self-driving cars, if done right, with the proper ingredients of technological innovation, and very importantly, with precise focus on functional safety, will change transportation as we know it.
+
+Each of the three partners will contribute its domain expertise and innovation in algorithms, data centers, computing infrastructure, connectivity, design, and validation to bring a self-driving car to serious production by 2021.
+
+The self-driving car we envision is the one that is fully autonomous in both urban and highway settings and is capable of supporting new business models of shared mobility.
+
+Mobileye brings our leading-edge algorithms and system on chip for machine perception, fusion, localization, and machine intelligence for path planning.
+
+All three parties envision a close collaborative work on fundamental aspects of sensor fusion and path planning and sharing computing between Mobileye's EyeQ system on chip and Intel's computing platforms.
+
+This partnership is nothing less than a turning point for the automotive industry at large.
+
+No more building concept vehicles or conducting research or performing fleet testing.
+
+The collaboration is about a commitment for serious production.
+
+The time is right, and our combined legacies, achievements, and know-how, each in its own domain, makes the pursuit of a fully autonomous car an achievable reality.",,,
+transcripts,INTC,Intel Corporation,0e05af56-72dc-5ec5-9eb3-96b4ab55283e_2,2019-09-26 00:00:00+00:00,"It drove also the penetration of NAND-based non-volatile memory into the data center storage hierarchy to feed those many virtual machines on the cloud platform.
+
+You saw some demonstrations outside here.
+
+That cloud architecture continues to advance at a rapid pace with optimized computing solutions for storage-centric and computing-centric platforms.
+
+AI will give us new tools and insights to generate economic value from that vast amount of data today and into tomorrow.
+
+Finally, the concepts and technologies that created the cloud are now transforming the network, the cloudification of the network, allowing it to flex and scale, moving more computing to the edge closer to where the data is created and consumed to alleviate network congestion and improve delays in real-time insight at the edge.
+
+Intel is taking a holistic approach to delivering on those platform capabilities.
+
+Our investments in technologies across the six pillars of innovation in computer architecture will support that data growth used by cloud computing, artificial intelligence, and the network cloudification.
+
+My good friend and coworker, Raja Koduri, is Intel's Chief Architect, and he's been clear about the six pillars that are driving growth for all of computing.
+
+We have significant investments in roadmaps planned for all six of these pillars, one of which is memory and storage, which is our focus today, obviously.
+
+Before we dig into memory and storage, let's hear from Raja how Intel is changing the fabric of computing with those six pillars.
+
+### Raja Koduri (Chief Architect, Intel)
+
+It's an incredibly exciting time to be an architect in the industry.
+
+Even more exciting to be at Intel, where we have access to all key technology pillars, process and packaging, scalar, vector, matrix, and spatial architectures, all levels of memory hierarchy, interconnect, security, and software.",,,
+transcripts,NVDA,Nvidia Corporation,5a9ee7dd-c399-5537-a712-a6b295b25f25_33,2025-03-19 00:00:00+00:00,"There's a profound and deep misunderstanding of it.
+
+It's actually a profoundly and deeply exciting moment.
+
+It's incredible that the world has moved towards reasoning AIs.
+
+That is even then just the tip of the iceberg.
+
+I hope to catch up with you guys again.
+
+We're going to Computex.
+
+I hope you're coming to Computex.
+
+This year's Computex is going to be gigantic.
+
+Okay?
+
+We have lots and lots of things to do at Computex this year because, as you know, the ecosystem, the computing ecosystem starts there.
+
+We got a mountain of work to do there.
+
+I look forward to seeing you guys there.
+
+All right, you guys.
+
+Thank you.",,,
+transcripts,NVDA,Nvidia Corporation,f5615815-1644-5e9c-97ff-e33ccde38594_26,2014-11-06 00:00:00+00:00,"There are some applications where accelerated computing just utterly shines.
+
+Of course, imaging is an area that accelerated computing does incredibly well.
+
+The number of applications related to understanding images and processing images from satellites, from cameras all over the world, from smartphones from all over the world, that understanding images is going to be just, if not the killer app, one of the major killer apps that we're looking at.
+
+This is a global phenomenon with all kinds of interesting applications.
+
+High-performance computing, accelerated computing at this point, is really quite synonymous, and I think that all the visibility that you see is just confirmation that we're down the right path.
+
+### Sanjay Chaurasia (Analyst, Nomura Securities International)
+
+You earlier said that obviously Tesla is a very small percentage of overall compute in data center.
+
+In that sense, what is the kind of growth profile you have in your mind?
+
+How do you see this business growing over the next two to three years?
+
+### Jensen Huang (President and CEO, NVIDIA)
+
+Well, I think that someday all data centers will be accelerated.
+
+Because we're starting from a very small base, it explains why Tesla is one of our largest growth opportunities.
+
+For two consecutive quarters, we've now seen record quarters, and the number of partners that are supporting Tesla is growing, and the depth of which they support Tesla is increasing.
+
+I think Tesla is going to be a large business over time, and I would be very surprised if there are important or large data centers anywhere in the world that aren't somehow accelerated by GPUs.
+
+### Sanjay Chaurasia (Analyst, Nomura Securities International)
+
+Thank you so much.
+
+### Jensen Huang (President and CEO, NVIDIA)
+
+Yeah.
+
+Thanks a lot.
+
+### Operator
+
+Okay, there's no further questions at this time.
+
+I'll turn the call back to our speakers.
+
+### Colette Kress (EVP and CFO, NVIDIA)
+
+Great.
+
+Thank you, operator.",,,
+transcripts,NVDA,Nvidia Corporation,389de737-a017-55ac-b04b-caff8bbaf02c_2,2020-06-09 00:00:00+00:00,"Billions around the world are sheltering at home, doing their part to slow the spread of the virus.
+
+Many are unable to make a living or struggling to do their jobs while caring for their families.
+
+At NVIDIA, we closed our nearly 60 offices around the world.
+
+We continued to pay contractors their full wage despite reduced staffing needs in our facilities.
+
+We gave employees raises early to put a little bit more money in their hands.
+
+Paying it forward, our employees have donated more than $10 million to help communities.
+
+NVIDIA is aiming our technology, our superpower, at COVID-19.
+
+When every second counts and much is at stake, scientists gear up with NVIDIA to jump to light speed.
+
+They're using NVIDIA accelerated computing to sequence and image the virus, search for vaccine or treatment, and build AI robots to disinfect hospitals.
+
+COVID-19 will not be the last virus, but it can be the last pandemic.
+
+We must start now to prepare for future outbreaks.
+
+Working with the international scientific community, we will develop an end-to-end computational defense system to detect threats earlier, contain the spread, speed vaccine development, and continuously test and monitor.
+
+This pandemic will demand long-term structural changes to healthcare, transportation, retail, and manufacturing, the world's largest industries.
+
+Our expertise in computing and AI will help industries rebuild. Harnessing NVIDIA's accelerated computing to save lives is the perfect example of our company's purpose: to tackle problems that ordinary computers cannot.
+
+NVIDIA stands at the intersection of two powerful technology forces, accelerated computing and AI.
+
+The computers we build are time machines that let scientists see the future today.
+
+Rocket ships that take researchers to the furthest frontiers of science.",,,
+transcripts,INTC,Intel Corporation,794dc2e7-06d2-5558-8357-4b96a5cbff36_17,2026-01-05 00:00:00+00:00,"The demand is huge.
+
+Growing in Series 3 was designed for this task.
+
+Just look at this data.
+
+Nearly two times better LLM latency performance and over 2x better TCO for video analytics.
+
+These SoCs are great at perceiving the environment and then using the built-in processors all on chip to control the machinery.
+
+There's no need to offload AI to a discrete card.
+
+We're also seeing a lot of interest in robotics, stationary control arms, autonomous mobile robots, and even humanoids.
+
+And you'll be able to see one if you're here at the show right back here running Series 3.
+
+And to facilitate these emerging use cases, we have worked on a reference board and a dev kit with edge ODMs that includes Intel's robotics suite, the tools, the frameworks, and the applications all available at the launch of Intel hardware.
+
+So let's wrap up with what's next.
+
+Our partners have over 200 designs.
+
+There will be a Series 3 option for everyone.
+
+Gamers, as you see, that want the best performance on the go will want this processor.
+
+vPro for business, robotics, and industrial edge devices.
+
+This will be the most broadly adopted and globally available AI PC platform Intel has ever shipped.
+
+You can tell we're excited.
+
+You can tell I'm excited for Core Ultra Series 3.
+
+And instead of doing a recap of all of this, the numbers speak for themselves.
+
+Longer battery, faster graphics, higher performance, more AI.
+
+And you don't have to wait.
+
+Core Ultra is ramping now.
+
+First consumer designs available to order starting tomorrow with more designs rolling out all year.
+
+We've covered a lot of ground today.
+
+I think we should take away one thing.
+
+And that is we are at the strategic inflection point for AI computing in client together.
+
+Our job, build leading process and SoCs.
+
+Our customers are delivering systems that will surprise the market.
+
+Our software partners, as you see, are investing in these platforms for scale.
+
+For those of you in person, hang tight.
+
+I have another.",,,
+transcripts,MU,Micron Technology Inc,9c2c39e0-2008-5652-ac3f-09cdeff3dbf1_17,2024-09-25 00:00:00+00:00,"So if you could just break it up between the front end and back end and how it's compared to the peers, that would be great.
+
+### Manish Bhatia (EVP of Global Operations, Micron Technology)
+
+Well, you know, I won't comment specifically, Mehdi, on competitors, but I will tell you that, and we have made comments on this before, we have made significant investments into what we call smart manufacturing and artificial intelligence for many years now, and we focus those in manufacturing both between technology development and manufacturing, and at that interface as we ramp new nodes so that our yield ramps, and we have given some color on this in the past.
+
+Our yield ramps continue node over node to be faster than prior nodes and more predictable and achieve higher mature levels, you know, as we move forward, so I think you can you know rest assured that all of those structural capabilities, we feel Micron is you know very very well positioned.
+
+And we are utilizing, you know, this is, you know, all the latest techniques, and in fact, many of the equipment vendors that we talk to tell us that we are leading in smart manufacturing, you know, utilization of these techniques to be able to improve efficiency in the fab as well as yield performance and quality performance.
+
+So I think, you know, feel good about about that.
+
+And, you know, I already on the, you know, previously on the call, you know, I think it was, was it Harlan who asked about yields on HBM and, you know, just continue to reiterate, how we feel good about where they are, we feel good about where they're going, and being able to support the, you know, the HBM, opportunity that we have ahead.
+
+### Mehdi Hosseini (Senior Equity Research Analyst, Susquehanna)
+
+But I guess I was asking specifically for any kind of qualitative color on comparing frontend and the back-end, not overall unit.
+
+### Manish Bhatia (EVP of Global Operations, Micron Technology)",,,
+transcripts,INTC,Intel Corporation,ed5a5e49-bcad-5bd0-8b2e-ebefeb937d94_3,2025-10-23 00:00:00+00:00,"Our collaboration with Nvidia is a prime example.
+
+We are joining forces to create a new class of products and experience spanning multiple generations that accelerate the adoption of AI for the hyperscale, enterprise, and consumer markets.
+
+By connecting our architectures through Nvidia NVLink, we combine Intel CPU and x86 leadership with Nvidia unmatched AI and accelerated computing strengths, unlocking innovative solutions that will deliver better customer experience and provide a beachhead for Intel in the leading AI platform of tomorrow.
+
+We need to continue to build on this momentum and capitalize on our position by improving our engineering and design execution.
+
+This includes hiring, promoting top architecture talents, as well as reimagining our core roadmap to ensure it is the best-in-class features.
+
+To accelerate this effort, we recently created the Central Engineering Group, which will unify our horizontal engineering functions to drive leverage across foundational IP development, test chip design, EDA tools, and design platforms.
+
+This new structure will eliminate duplications, improve time to decision-making, and enhance coherence across all product development.
+
+In addition, and just as important, the group will spearhead the build-out of a new ASIC and design service business to deliver purpose-built silicon for a broad range of external customers.
+
+This will not only extend the reach of our core x86 IP, but also leverage our design strengths to deliver an array of solutions from general purpose to fixed-function computing.
+
+In client, we are on track to launch our first Panther Lake SKU by year-end, followed by additional SKUs in the first half of next year.
+
+This will help us to solidify our strong position in the notebook segment across both consumer and enterprise with cost-optimized products.
+
+Across our full PC stack, from our entry-level offering to our mainstream Core family, up to our highest performing Core Ultra family.",,,
+transcripts,DELL,Dell Inc,03061449-a517-526a-a019-6bd89fc3bcdf_4,2024-12-03 00:00:00+00:00,"And you couple those with these services capabilities, and not just the support services that Dell has a rich heritage in, but really the deployment and integration services.
+
+This is what allows us to deploy 50,000 GPUs in six weeks.
+
+Right?
+
+That's another incredible feat and capability that we've built over the last 18 months.
+
+And you take those three, and then you think about the AI factory solutions that we build on top of that.
+
+We now have 40-plus solutions, again, that cross the portfolio against a myriad of use cases.
+
+And then we have our pursuits team.
+
+So a lot of these conversations are engineer-to-engineer-led conversations.
+
+And so we've built out capabilities within our CTO organization, which would include data center architect, system architect, storage architect, network architect, and a thermal architect to ensure that we're driving the level of customization and meeting the requirements of these customers.
+
+We've been able to stitch this value proposition and hone it in over the last 18 months, and it's resonating extremely well.
+
+The opportunity to engineer solutions end-to-end on one team and optimize it for the customer, again, is a very strong value proposition, and we see it in the tier two CSPs, and we see it in the enterprise alike.
+
+### David Vogt (Hardware Networking Analyst, UBS)
+
+So can I ask a follow-up to that?
+
+So obviously, the end-to-end solution, I think, clearly allows you to win business.
+
+It's resonating.
+
+To some degree, though, you're dependent upon GPU availability.
+
+Correct?
+
+And you're also dependent upon when tier two and enterprise customers want to take deployment.
+
+So how do we think about this pipeline metric, your backlog number that you've publicly disclosed versus revenue rack?
+
+So from initial conversation to deployment revenue rack, I know there's no standard answer, but just maybe give us a sense for what those conversations look like and how long that generally takes versus historically, right?",,,
+transcripts,MU,Micron Technology Inc,38856b84-7bbb-53f5-9c63-286c3020a212_3,2017-12-19 00:00:00+00:00,"This is perhaps most evident in the mobile market.
+
+Smartphone capabilities have surpassed simple communication and web browsing.
+
+They help us navigate, monitor, and interact with the world around us.
+
+New cameras capture precious moments with amazing fidelity, and emerging applications like AR have tremendous promise.
+
+This increase in functionality is driving the use of higher capacity memory solutions and increased storage in mobile devices.
+
+These trends, along with our solid execution, drove record mobile revenue in FQ1.
+
+We are strengthening our offerings and continue to diversify our portfolio of LPDRAM, MCP, and discrete managed storage solutions to meet the growing needs of our customers.
+
+We are accelerating our progress to expand our portfolio of low power solutions with the release of new products, such as our 1x LPDRAM designs.
+
+We also shipped initial samples of our 64-layer NAND discrete UFS solution to chipset partners and customers with very promising results.
+
+Home automation and edge computing devices continue to drive strong revenues in consumer and industrial market segments, which require a wide variety of memory and managed storage products.
+
+As more edge devices begin to integrate machine learning and intelligence, we see opportunities to provide higher performance memory and flash storage solutions in these markets.
+
+We have also seen rapidly growing demand for our graphics products.
+
+The graphics market continues to be fueled by the ever-growing popularity of gaming and esports.
+
+Although smaller in size, recent interest in cryptocurrency mining has put further pressure on graphics memory supply.
+
+Our close customer relationships and leading product portfolio helped drive record graphics revenue up more than 75% year-over-year.
+
+We sampled industry-leading 16 gigabit per second GDDR6 products to key customers and are seeing significant interest in automotive and networking applications that need the high bandwidth this memory provides.",,,
+transcripts,MU,Micron Technology Inc,88df9995-e454-51b0-8681-5729c8d837df_1,2023-08-30 00:00:00+00:00,"Can also refer to that product as HBM3E.
+
+You know, subsequent competitor announcements show that, you know, Micron will have a product that leads on specs when it's ramping.
+
+On August 7th, also supporting data center, we announced a memory expansion module product both uses and supports the CXL standard.
+
+And then finally, most recently, we did complete CHIPS grant filings for a fab in Idaho and a mega fab in New York.
+
+So with that, we'll take the rest of the Q&A.
+
+### Sidney Ho (Stock Analyst, Deutsche Bank)
+
+Okay, great.
+
+Well, yeah, thanks for that update.
+
+Maybe just a few follow-up questions on what you just mentioned.
+
+You talked about price inflection, expecting price decline, inflection in the second half, and in fact, today you updated to be just about now.
+
+Can you add some color as to the scope and magnitude of the price increases that you're expecting?
+
+Are you seeing that both in DRAM and-
+
+### Mark Murphy (EVP and CFO, Micron Technology)
+
+We are.
+
+You know, the market is playing out as we had expected.
+
+You know, severe downturn beginning last summer, broad-based supply response as a result of that downturn that has helped begin to stabilize inventory levels and thus pricing.
+
+And so now we are with inventories in a better position in many markets and volumes continuing to increase.
+
+We are seeing now, you know, first it started in pockets, but now we say generally, we're seeing pricing bottom.
+
+### Sidney Ho (Stock Analyst, Deutsche Bank)
+
+Okay.
+
+### Mark Murphy (EVP and CFO, Micron Technology)
+
+We expect that to, you know, pricing to strengthen through the second half of the calendar year, you know, assuming these supply discipline holds and also that the volume continues to expand.
+
+### Sidney Ho (Stock Analyst, Deutsche Bank)
+
+Okay, great.
+
+Maybe on data center recovery, you talk about data center inventory will likely normalize around the end of the calendar year or somewhat thereafter.
+
+What gives you confidence?",,,
+transcripts,NVDA,Nvidia Corporation,0ffef5cc-292b-5dfa-baa4-d69e53244cad_28,2016-11-10 00:00:00+00:00,"In no time in the history of our company have we enjoyed and addressed as exciting large markets as we have today, whether it is artificial intelligence, self-driving cars, the gaming market as it continues to grow and evolve, and virtual reality.
+
+Of course, we all know now very well that GPU deep learning has ignited a wave of AI innovation all over the world.
+
+Our strategy and the thing that we have been working on for the last seven years is building an end-to-end AI computing platform, starting from GPUs that we have optimized and evolved and enhanced for deep learning to system architectures, to algorithms for deep learning, to tools necessary for developers, to frameworks and the work that we do with all of the framework developers and AI researchers around the world, to servers, to cloud data centers, to ecosystems, and working with ISVs and startups, and all the way to evangelizing and teaching people how to use deep learning to revolutionize the software that they build.
+
+We call that the Deep Learning Institute, the NVIDIA DLI.
+
+So these are some of the high-level points that I hope that you got, and I look forward to talking to you again next quarter.
+
+### Operator
+
+This concludes today's conference call.
+
+You may now disconnect.
+
+We thank you for your participation.",,,
+transcripts,NVDA,Nvidia Corporation,ad30fcb5-1a85-5eb3-93a3-427e26cdabdb_35,2025-10-28 00:00:00+00:00,"SAP, 80% of the world's commerce.
+
+Christian Klein and I are working together to integrate NVIDIA libraries, CUDA-X and Nemo and Nemotron, all of our AI systems into SAP.
+
+Working with Sassine over at Synopsys, accelerating the world's CAE, CAD, EDA tools so that they could be faster and could scale, helping them create AI agents.
+
+One of these days, I would love to hire AI agent ASIC designers to work with our ASIC designers, essentially the cursor of Synopsys, if you will.
+
+We're working with Anirudh.
+
+Anirudh, I saw him earlier today.
+
+He was part of the pre-game show.
+
+Cadence, doing incredible work, accelerating their stack, creating AI agents so that we can have Cadence AI ASIC designers and system designers working with us.
+
+Today, we're announcing a new one.
+
+AI will supercharge productivity.
+
+AI will transform just about every industry, but AI will also supercharge cybersecurity challenges, the bad AIs.
+
+And so we need an incredible defender.
+
+I can't imagine a better defender than CrowdStrike.
+
+George, George is here.
+
+He was here.
+
+Yep, I saw him earlier.
+
+We are partnering with CrowdStrike to make cybersecurity speed of light, to create a system that has cybersecurity AI agents in the cloud, but also incredibly good AI agents on-prem or at the edge.
+
+This way, whenever there's a threat, you are moments away from detecting it.
+
+We need speed, and we need fast agentic AI, super smart AIs.
+
+I have a second announcement.
+
+This is the single fastest enterprise company in the world, probably the single most important enterprise stack in the world today, Palantir Ontology.
+
+Anybody from Palantir here?
+
+I was just talking to Alex earlier.
+
+This is Palantir Ontology.
+
+They take information, they take data, they take human judgment, and they turn it into business insight.",,,
+transcripts,NVDA,Nvidia Corporation,b85eb6f0-c663-5652-bbee-36a5e68a23e8_5,2025-03-03 00:00:00+00:00,"All of that now can be facilitated by today's agentic AI, so there's going to be amazing progress that is going to be felt there, and then the third one being digital health.
+
+Think of these as digital humans that you can hire on behalf of this otherwise completely stretched and burning out healthcare force that we have.
+
+We need to augment them with a digital health force.
+
+And we now have the ability.
+
+Hippocratic AI, one of our fantastic partners, just launched at the January Health Conference a whole agent AI marketplace where instead of the software systems of the past, the electronic health records, which were huge software deployments, billions of dollars, huge change cost, huge training and change management necessary in the healthcare system, we're now in the phase of just like you and I as consumers, we can order groceries or use a service like Spotify, on-demand services.
+
+You can now augment the healthcare system and start to navigate it through on-demand digital human and digital health services.
+
+And so this is really, really fantastic.
+
+And this is happening right now as we speak.
+
+And this is not, we're going to see this in three or five years.
+
+This is what we're going to see happen in the next three months.
+
+So super excited about digital health.
+
+So those are really the three verticals that I think truly address a gigantic opportunity.
+
+Think about that $3 trillion of operating expenses in labor and how we're going to augment them.
+
+That can easily be a couple hundred billion dollars in what we call AI factory, AI infrastructure to support all of those agents, supporting the robotic surgeries of the future, supporting the digital biology labs of the future, and supporting all of our healthcare workers.
+
+So this is a gigantic opportunity.
+
+### Josh Buchalter (Semiconductor Analyst, TD Cowen)
+
+Yeah, I think that's a really super helpful lay of the different use cases for AI within healthcare that you just outlined.",,,
+transcripts,NVDA,Nvidia Corporation,2561f5e5-ad9d-59e6-b5ad-383c76650a52_19,2026-09-10 00:00:00+00:00,"The system, I think it is going to be phenomenally successful.
+
+It is basically a distributed edge data center.
+
+All of this is, I think, probably about five years into cooking.
+
+You will just see more and more of it.
+
+In the meantime, NVIDIA is already successful in physical AI because before you deploy the model, you have to train the model.
+
+People know that Elon and I worked together in the Tesla supercomputers that he called Dojo, and that has a whole bunch of GPUs inside.
+
+That is for training these self-driving cars.
+
+There is a whole bunch of examples like that.
+
+### James Schneider (Senior Equity Analyst, Goldman Sachs)
+
+Yeah.
+
+I think I have virtually got to wrap up there.
+
+Thanks so much, Jensen, for being with us.
+
+We appreciate it.
+
+### Jensen Huang (CEO, NVIDIA)
+
+All right, guys.
+
+Thank you.",,,
+transcripts,ADBE,Adobe Inc,c242198b-86af-5e0d-8532-8b10ea1b2bbd_23,2024-03-14 00:00:00+00:00,"Maybe, maybe for both David and, and Shantanu, clearly, a lot of, of news around video creation, using generative AI during the quarter, of course, with the announcement of Sora.
+
+You know, maybe the, the question for you folks is, can we just talk a little bit about how you think about the market impact that generative AI can have in the video editing market, and, and how maybe Firefly can participate in, in, in that, in that trend?
+
+### Shantanu Narayen (Chair and CEO, Adobe)
+
+Sure, Saket.
+
+I mean, I'll start, and then David can add.
+
+I mean, firstly, I think the advances, whether it's in OpenAI or our own models, that certainly, you know, David and I have the pleasure of looking at, you know, on a weekly basis.
+
+The advances are amazing because you have to, when you're thinking about video, solve some other fundamental problems like physics, right?
+
+I mean, if you have somebody walking on a street, how do you make sure that they don't go through a building or go through the floor?
+
+And so I think, you know, some of those video advancements that we have seen within Adobe have really addressed some of those hard problems.
+
+A big picture, though, video, I think, will be even more of an accelerant for editing applications.
+
+I mean, I think this notion that, you know, the next Oppenheimer will be done using, you know, a text to video prompt is just, you know, it's not gonna happen, you know, for decades.
+
+And so I, I think actually, more so in video, there's gonna be an accelerant for people saying: How do I get an on-ramp as it relates to, you know, using text to video, and then, you know, edit that using our applications?
+
+And so I, I think I'm really, particularly excited about what we can do with Premiere as well as with, you know, After Effects as it relates to video.
+
+So net-net, I would say, Saket, the technology is impressive.
+
+We have our models.
+
+We have integrated into our interfaces.
+
+We're also partnering.",,,
+transcripts,NVDA,Nvidia Corporation,0ce0ef4b-c494-5479-ba1f-ff181b8eb3a3_5,2019-08-15 00:00:00+00:00,"We've made DGX SuperPOD available commercially to customers, essentially providing them with a turnkey supercomputer that they can assemble in weeks rather than months. It is roughly 400 times smaller in size than other similarly performing top 500 systems, which are built from thousands of servers. Also at the conference, we announced that by next year's end, we will make available to the Arm ecosystem NVIDIA's full stack of AI and HPC software, which accelerates more than 600 HPC applications and all AI frameworks. With this announcement, NVIDIA will accelerate all major CPU architectures, including x86, Power, and Arm. Lastly, regarding our pending acquisition of Mellanox, we have received regulatory approval in the U.S. and are engaged with regulators in Europe and China. The approval process is progressing as expected, we continue to work toward closing the deal by the end of this calendar year. Moving to pro visualization.
+
+Revenue reached $291 million, up 4% from a prior year and up 9% sequentially. Year on year and sequential growth were led by record revenue from mobile workstations with strong demand for new thin and light form factors. We had a great showing at SIGGRAPH, the computer graphics industry's biggest annual conference held in Los Angeles. Our researchers won several Best in Show awards. In just a year since the launch of RTX ray tracing, over 40 design and creative applications with RTX technology have been announced by leading software vendors, including Adobe, Autodesk, and Dassault SystÃ¨mes, and many others. NVIDIA RTX technologies has reinvigorated the computer graphics industry by enabling researchers and developers to take a leap in photorealistic rendering, augmented reality, and virtual reality. Finally, turning to automotive. Q2 revenue was $209 million, up 30% from a year ago and up 26% sequentially.",,,
+transcripts,ADBE,Adobe Inc,d9826bc4-46b4-5703-80b7-a4a7950773da_72,2023-10-10 00:00:00+00:00,"It also applies to every function and every individual in terms of how we're creating the future of work.
+
+Firefly, you've heard a lot about it today.
+
+It's a great story of innovation, but it's also a great story about teams at Adobe transforming how we create experiences and develop products.
+
+To start from the beginning, we have to look at the incredible foundation of technology, innovation, and initiative that came before.
+
+Decades of investment in core graphics and imaging technology, Adobe Sensei and AI capabilities, and deep insights into how creators create and how marketers, advertisers, and companies use content.
+
+Processes designed for responsible AI, as Dana just described, and a strong ecosystem, content creators and contributors with Adobe Stock, industry partners aligned around the Content Authenticity Initiative, and real-time analytical capabilities with leading brands around the world.
+
+The ingredients to Adobe's full stack AI strategy, the apps and interfaces, the models, and the data were already in formation.
+
+And then, in January of this year, in the midst of building Firefly capabilities into our products, we decided to get the technology into the hands of our users sooner in the form of the Firefly web app.
+
+So we pivoted, and we set a new goal to the Firefly team to launch Firefly.adobe.com in less than two months.
+
+A cross-functional team came together, and to meet this unprecedented timeframe, they combined agile methodologies with the assistance of Gen AI.
+
+Research and development teams were able to stand up a working website in record time with Gen AI coding tools.
+
+Engineers got to work as if they each had a team of virtual coding assistants.
+
+The dev team and the design teams were able to ideate, design, and iterate new user experiences rapidly with Gen AI tools, and they used Firefly to speed up the creation of new icons and images used throughout the user experience.",,,

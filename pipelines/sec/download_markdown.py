@@ -12,7 +12,7 @@ DATA_SOURCE = "sec_edgar"
 # Below this, treat the response as broken rather than a genuine filing --
 # catches empty bodies, error/placeholder pages, and other silent failures
 # from the fetch or markdown conversion. Real filings in our form set
-# (10-K, 10-Q, 8-K, 20-F, S-4, ...) are always at least a few thousand
+# (10-K, 10-Q, 8-K, 20-F, 6-K, S-4, ...) are always at least a few thousand
 # characters; this threshold is well below the smallest of those, so it
 # only trips on genuinely bad responses.
 MIN_MARKDOWN_LENGTH = 500

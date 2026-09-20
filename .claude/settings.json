@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(python -m py_compile classification/sec/LLM_Filtering.py classification/transcripts/LLM_Filtering.py)",
+      "Bash(ps -o pid,etime,pcpu -p 19744)",
+      "Bash(python -m py_compile classification/sec/LLM_Filtering.py classification/transcripts/LLM_Filtering.py classification/news/LLM_Filtering.py)"
+    ]
+  }
+}

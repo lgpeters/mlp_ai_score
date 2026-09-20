@@ -19,6 +19,10 @@ create table if not exists hackernews (
     num_comments  int,
     created_at    timestamptz,
     story_text    text,
+    -- LLM classification lives in chunk_classifications (keyed on
+    -- content_index.chunk_id), not here -- it stands alone from any
+    -- specific source table so the same pipeline generalizes across every
+    -- source's chunks, not just Hacker News. See sql/0011_chunk_classifications.sql.
     unique (ticker, story_id)
 );
 

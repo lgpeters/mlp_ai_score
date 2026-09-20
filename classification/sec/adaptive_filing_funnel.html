@@ -1,0 +1,370 @@
+<title>Adaptive AI Classification Funnel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F6; --panel:#FFFFFF; --ink:#12181F; --muted:#5B6773; --line:#DEE4E8;
+  --kept:#1F9D77; --dropped:#9AA3AB; --dropped-bg:#ECEEEF;
+  --nvda:#3E6FD9; --intc:#2FA6AC; --mu:#7A6FE0; --dell:#7C93A8;
+  --adbe:#C24FD1; --team:#E0A23D; --cat:#D9683F; --wm:#5C9A57; --pg:#B6874E;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151A; --panel:#171E25; --ink:#E9EEF2; --muted:#8B9AA6; --line:#2A343D; --dropped-bg:#1D242B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151A; --panel:#171E25; --ink:#E9EEF2; --muted:#8B9AA6; --line:#2A343D; --dropped-bg:#1D242B;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Archivo", system-ui, sans-serif;
+  padding-inline:24px; padding-block:40px 60px;
+}
+.wrap{max-width:960px; margin:0 auto; display:flex; flex-direction:column; gap:36px}
+.mono{font-family:"JetBrains Mono", "SF Mono", monospace; font-variant-numeric:tabular-nums}
+
+header{display:flex; flex-direction:column; gap:10px}
+.eyebrow{font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:600}
+h1{margin:0; font-size:2.1rem; font-weight:700; letter-spacing:-0.015em; text-wrap:balance}
+.sub{margin:0; color:var(--muted); font-size:1rem; max-width:68ch; line-height:1.6}
+.sub b{color:var(--ink); font-weight:600}
+
+h2{margin:0; font-size:1.2rem; font-weight:600; letter-spacing:-0.005em}
+.section{display:flex; flex-direction:column; gap:14px}
+.section-note{margin:0; color:var(--muted); font-size:0.9rem; max-width:70ch; line-height:1.55}
+
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:24px clamp(14px,3vw,30px)}
+
+.stat-row{display:flex; flex-wrap:wrap; gap:22px}
+.stat{display:flex; flex-direction:column; gap:2px}
+.stat .n{font-size:1.5rem; font-weight:700; letter-spacing:-0.01em}
+.stat .l{font-size:0.76rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em}
+
+/* --- funnel diagram --- */
+.funnel{overflow-x:auto}
+.funnel svg{display:block; width:100%; height:auto; min-width:680px}
+.fbox{fill:var(--panel); stroke:var(--line); stroke-width:1.3; rx:8}
+.fbox.kept{stroke:var(--kept)}
+.flabel{font-family:"Archivo"; font-size:12.5px; font-weight:600; fill:var(--ink); text-anchor:middle}
+.fsub{font-family:"JetBrains Mono", monospace; font-size:11px; fill:var(--muted); text-anchor:middle}
+.farrow{stroke:var(--muted); stroke-width:1.4; fill:none; marker-end:url(#arrow)}
+.fgate{font-family:"JetBrains Mono", monospace; font-size:10.5px; fill:var(--muted); text-anchor:middle}
+
+/* --- chart --- */
+svg.chart{display:block; width:100%; height:auto; min-width:600px}
+.gridline{stroke:var(--line); stroke-width:1}
+.axis-label{fill:var(--muted); font-size:11px; font-family:"JetBrains Mono", monospace}
+.axis-label.x{text-anchor:middle}
+.bar-doc{fill:var(--kept)}
+.bar-label{font-family:"JetBrains Mono", monospace; font-size:12px; font-weight:600; fill:var(--ink); text-anchor:middle}
+.bar-sub{font-family:"JetBrains Mono", monospace; font-size:10px; fill:var(--muted); text-anchor:middle}
+
+.legend{display:flex; flex-wrap:wrap; gap:9px 16px; padding-top:4px}
+.legend-item{display:flex; align-items:baseline; gap:6px; font-size:0.84rem}
+.swatch{width:9px; height:9px; border-radius:50%; display:inline-block; flex:none; transform:translateY(1px)}
+.legend .n{color:var(--muted); font-size:0.78rem}
+
+/* --- case study --- */
+.case-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.case-title{font-weight:600; font-size:1.02rem}
+.case-stat{font-size:0.85rem; color:var(--muted)}
+.case-stat b{color:var(--dropped); font-weight:600}
+.case-stat b.win{color:var(--kept)}
+.snippets{display:flex; flex-direction:column; gap:8px; margin-top:6px}
+.snippet{
+  background:var(--dropped-bg); border:1px solid var(--line); border-radius:8px;
+  padding:10px 14px; font-size:0.85rem; line-height:1.5; color:var(--muted);
+  display:flex; gap:10px; align-items:flex-start;
+}
+.snippet .tag{
+  flex:none; font-family:"JetBrains Mono", monospace; font-size:0.68rem; font-weight:600;
+  color:var(--dropped); background:var(--panel); border:1px solid var(--line); border-radius:4px;
+  padding:2px 6px; margin-top:1px; white-space:nowrap;
+}
+.snippet .txt{color:var(--ink)}
+.more{font-size:0.82rem; color:var(--muted); font-style:italic; padding-left:2px}
+
+.heatmap-wrap{overflow-x:auto}
+table.heatmap{border-collapse:collapse; width:100%; min-width:640px}
+table.heatmap th, table.heatmap td{padding:0; text-align:center}
+table.heatmap thead th{
+  font-family:"JetBrains Mono", monospace; font-size:11px; font-weight:600; color:var(--muted);
+  padding:0 4px 8px; text-transform:uppercase; letter-spacing:0.03em;
+}
+table.heatmap thead th:first-child{text-align:left}
+table.heatmap tbody th{
+  font-family:"JetBrains Mono", monospace; font-size:11.5px; font-weight:500; color:var(--muted);
+  text-align:left; padding-right:10px; white-space:nowrap;
+}
+table.heatmap td{padding:2px}
+.heat-cell{
+  display:flex; align-items:center; justify-content:center;
+  height:30px; border-radius:5px; font-family:"JetBrains Mono", monospace;
+  font-size:11px; font-weight:600;
+}
+.heat-empty{color:var(--line); font-size:11px}
+.heat-caption{font-size:0.86rem; font-weight:600; margin-bottom:2px}
+
+footer{color:var(--muted); font-size:0.8rem; line-height:1.65; border-top:1px solid var(--line); padding-top:16px}
+footer code{font-family:"JetBrains Mono", monospace; font-size:0.76rem; background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 5px}
+footer pre{font-family:"JetBrains Mono", monospace; font-size:0.74rem; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:10px 12px; overflow-x:auto; margin:8px 0 0; line-height:1.6}
+
+@media (max-width:520px){
+  h1{font-size:1.6rem}
+  .panel{padding-inline:12px}
+  .depth-row{grid-template-columns:40px 1fr 70px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">classification / sec — methodology · complete run · classifier model: claude-haiku-4-5</span>
+    <h1>Adaptive AI Classification Funnel</h1>
+    <p class="sub">This is the same retrieval-and-round strategy used to classify <b>every</b> source in this pipeline — SEC filings of every type, and earnings-call/investor-event transcripts. The numbers and charts on this specific page are just one completed slice of that: <b>127 10-Ks and 20-Fs</b> (annual reports only), ~34,000 possible chunks. Most of any filing is legal boilerplate, financial tables, and risk-factor language that will never mention AI — so instead of classifying every chunk, each document is <b>searched</b> for its most plausible AI-relevant passages, batch-classified a few chunks at a time, and re-evaluated round by round. Documents that stop paying off get dropped; documents still finding real AI content keep going. This run finished naturally after 10 rounds — no document had a nonzero hit rate left.</p>
+  </header>
+
+  <div class="panel stat-row">
+    <div class="stat"><span class="n mono">127 → 0</span><span class="l">documents, round 1 → round 10</span></div>
+    <div class="stat"><span class="n mono">7,395</span><span class="l">chunks ever classified</span></div>
+    <div class="stat"><span class="n mono">1,376</span><span class="l">genuine AI hits (18.6%)</span></div>
+    <div class="stat"><span class="n mono">10</span><span class="l">rounds to full convergence</span></div>
+  </div>
+
+  <div class="section">
+    <h2>How one round works</h2>
+    <p class="section-note">Each round, every document is searched with a specialised financial embedding model against 5 fixed candidate queries, surfacing the top responses per query, per document, per round — merged and deduped before anything is sent to the model. This repeats for as many rounds as a document keeps earning: retrieve → classify in bulk → check the hit rate → keep or drop. Round number is tracked per document, not per batch — a batch submission can mix documents at very different depths, so each chunk's round is recomputed from its own document's history, not inherited from whatever else shipped in the same request.</p>
+    <div class="panel funnel">
+      <svg viewBox="0 0 900 215" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/>
+          </marker>
+        </defs>
+
+        <rect class="fbox" x="10" y="70" width="130" height="60"/>
+        <text class="flabel" x="75" y="95">127 filings</text>
+        <text class="fsub" x="75" y="112">in scope</text>
+
+        <path class="farrow" d="M140,100 H205"/>
+        <text class="fgate" x="172" y="86">financial embedding</text>
+        <text class="fgate" x="172" y="98">5 candidate queries</text>
+
+        <rect class="fbox" x="205" y="70" width="150" height="60"/>
+        <text class="flabel" x="280" y="93">Retrieve</text>
+        <text class="fsub" x="280" y="110">top-5/query, per doc</text>
+
+        <path class="farrow" d="M355,100 H420"/>
+        <text class="fgate" x="387" y="90">merge + dedupe</text>
+
+        <rect class="fbox" x="420" y="70" width="150" height="60"/>
+        <text class="flabel" x="495" y="93">Batch classify</text>
+        <text class="fsub" x="495" y="110">4 chunks / request</text>
+
+        <path class="farrow" d="M570,100 H635"/>
+        <text class="fgate" x="602" y="90">hit rate</text>
+
+        <rect class="fbox" x="635" y="30" width="120" height="50"/>
+        <text class="flabel" x="695" y="50" style="fill:var(--kept)">≥ 2 hits</text>
+        <text class="fsub" x="695" y="66">keep — next round</text>
+
+        <rect class="fbox" x="635" y="115" width="120" height="50"/>
+        <text class="flabel" x="695" y="135" style="fill:var(--dropped)">&lt; 2 hits</text>
+        <text class="fsub" x="695" y="151">drop — done</text>
+
+        <path class="farrow" d="M600,90 C615,90 620,55 635,55"/>
+        <path class="farrow" d="M600,110 C615,110 620,140 635,140"/>
+
+        <path class="farrow" d="M695,80 C 730,90 730,150 695,165 C 660,180 610,150 610,115" stroke-dasharray="3 3"/>
+        <text class="fsub" x="700" y="192" text-anchor="middle">next round (kept docs only)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Documents surviving, round by round</h2>
+    <p class="section-note">A document only continues if it scored <b class="mono" style="color:var(--ink)">≥ 2</b> genuine AI hits in the round just finished — a single stray hit (retrieval noise) isn't enough to justify another round. No document has an artificial ceiling on how many rounds it can run; a fixed per-document chunk cap was tried early on and scrapped once it turned out to be cutting off the highest-signal filings prematurely, well before they'd actually run dry.</p>
+    <div class="panel">
+      <svg class="chart" id="survivalChart" viewBox="0 0 900 400" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Dynamic search backoff for classification token reduction</h2>
+    <p class="section-note"><b style="color:var(--ink)">Annual reports (10-K/20-F) only</b> — one completed slice of the full corpus, not the whole thing. Per filing, per year: how much of the document the search ever actually looked at, and how much of it turned out to be genuine AI content. Both are computed against the <b class="mono" style="color:var(--ink)">same denominator</b> — every chunk in the filing, including the ones never sent to the model — so the gap between the two heatmaps below is the real token saving: everything left uncolored in the second grid is content the model was never paid to read, because the search had already decided (rightly, per the case studies below) that it wasn't worth another round.</p>
+    <div class="panel">
+      <div class="heat-caption">% of content classified by the LLM</div>
+      <div class="heatmap-wrap"><table class="heatmap" id="heatClassified"></table></div>
+    </div>
+    <div class="panel">
+      <div class="heat-caption">% of content scored <span class="mono">ai_associated ≥ 1</span></div>
+      <div class="heatmap-wrap"><table class="heatmap" id="heatHits"></table></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Two documents, two outcomes</h2>
+    <div class="panel" style="margin-bottom:14px">
+      <div class="case-head">
+        <span class="case-title">NVIDIA · 10-K · filed 2013-03-12</span>
+        <span class="case-stat"><b>0 / 11</b> candidates hit · dropped after round 1</span>
+      </div>
+      <p class="section-note" style="margin-top:8px">All 11 of its round-1 candidates — the chunks the search itself judged most likely to be AI-relevant — came back <span class="mono" style="color:var(--dropped); font-weight:600">ai_associated = 0</span>. Reading them confirms the search wasn't wrong to give up: this is 2013 Nvidia, a GPU and workstation-graphics company, years before "AI" was any part of how it described itself.</p>
+      <div class="snippets" id="caseSnippets"></div>
+      <div class="more" id="caseMore"></div>
+    </div>
+    <div class="panel">
+      <div class="case-head">
+        <span class="case-title">NVIDIA · 10-K · filed 2026-02-25</span>
+        <span class="case-stat"><b class="win">69 / 194</b> candidates hit across all 10 rounds (35.6%)</span>
+      </div>
+      <p class="section-note" style="margin-top:8px">The opposite extreme. Every single round from 1 through 10 kept finding genuine AI content — 13 hits in round 1 alone, still 1 hit left in round 10 before the well finally ran dry. Intel's 2025 10-K told the same story almost exactly (44/204 hits, 21.6%), also surviving the full 10 rounds.</p>
+    </div>
+  </div>
+
+  <footer>
+    Source: <code>chunk_classifications</code> (<code>round</code> column, computed per document at write time) joined to <code>content_index</code> / <code>content</code> / <code>companies</code>, from <code>classification/sec/LLM_Filtering.py</code>'s round-based retrieval over 10-K/20-F filings. Reproducible with:
+    <pre>select cc.round, count(distinct c.content_id) as docs, count(*) as chunks,
+       sum((cc.ai_associated > 0)::int) as hits
+from chunk_classifications cc
+join content_index ci using (chunk_id)
+join content c using (content_id)
+where c.type = 'sec_filing' and cc.round is not null
+group by 1 order by 1;</pre>
+    Complete run: rounds 1-10, 127 → 59 → 45 → 40 → 33 → 28 → 22 → 17 → 10 → 2 → 0 documents surviving. Two historical bugs were found and fixed mid-run: an early per-document chunk cap (50) that was silently cutting off the highest-signal filings well before they'd actually exhausted their content, and a round-numbering scheme that labeled a whole batch submission with one shared round number even when it mixed documents at different depths — both are reflected in this page's final numbers, not the numbers from before either fix.
+  </footer>
+</div>
+
+<script>
+const ROUND_DATA = [
+  {round:1, docs:127, chunks:2205, hits:394},
+  {round:2, docs:59,  chunks:1142, hits:305},
+  {round:3, docs:45,  chunks:906,  hits:212},
+  {round:4, docs:40,  chunks:812,  hits:162},
+  {round:5, docs:33,  chunks:686,  hits:108},
+  {round:6, docs:28,  chunks:585,  hits:88},
+  {round:7, docs:22,  chunks:458,  hits:57},
+  {round:8, docs:17,  chunks:353,  hits:40},
+  {round:9, docs:10,  chunks:207,  hits:9},
+  {round:10,docs:2,   chunks:41,   hits:1},
+];
+
+// ticker, year, total chunks in doc, chunks classified, chunks ai_associated>0
+const COMPANY_ORDER = ["NVDA","ADBE","INTC","MU","DELL","TEAM","WM","PG","CAT"];
+const YEARS = Array.from({length:15}, (_,i) => 2012+i);
+const FILING_DATA = [
+  ["ADBE",2012,351,21,0],["ADBE",2013,349,21,0],["ADBE",2014,282,19,1],["ADBE",2015,297,17,0],
+  ["ADBE",2016,291,18,0],["ADBE",2017,279,19,1],["ADBE",2018,269,17,1],["ADBE",2019,278,33,4],
+  ["ADBE",2020,286,140,23],["ADBE",2021,299,164,26],["ADBE",2022,250,82,16],["ADBE",2023,244,116,21],
+  ["ADBE",2024,251,160,46],["ADBE",2025,255,178,59],["ADBE",2026,231,157,44],
+  ["CAT",2012,91,15,0],["CAT",2013,92,15,0],["CAT",2014,92,17,0],["CAT",2015,100,13,0],
+  ["CAT",2016,384,15,0],["CAT",2017,410,60,4],["CAT",2018,393,39,4],["CAT",2019,389,19,1],
+  ["CAT",2020,375,16,1],["CAT",2021,341,15,0],["CAT",2022,321,16,0],["CAT",2023,314,17,0],
+  ["CAT",2024,309,58,4],["CAT",2025,313,37,3],["CAT",2026,313,57,4],
+  ["DELL",2012,270,16,0],["DELL",2013,276,15,0],["DELL",2017,438,15,0],["DELL",2018,443,15,0],
+  ["DELL",2019,464,17,0],["DELL",2020,467,21,1],["DELL",2021,427,35,4],["DELL",2022,378,18,1],
+  ["DELL",2023,366,83,8],["DELL",2024,352,82,14],["DELL",2025,348,164,35],["DELL",2026,334,124,33],
+  ["INTC",2012,280,18,0],["INTC",2013,281,19,0],["INTC",2014,292,16,0],["INTC",2015,296,16,0],
+  ["INTC",2016,314,18,0],["INTC",2017,271,37,2],["INTC",2018,256,37,3],["INTC",2019,294,189,28],
+  ["INTC",2020,303,185,35],["INTC",2021,319,118,28],["INTC",2022,327,189,32],["INTC",2023,339,141,29],
+  ["INTC",2024,346,142,49],["INTC",2025,337,204,44],["INTC",2026,364,186,48],
+  ["MU",2012,259,18,1],["MU",2013,315,18,1],["MU",2014,283,39,4],["MU",2015,252,17,0],
+  ["MU",2016,258,18,0],["MU",2017,242,20,1],["MU",2018,236,131,15],["MU",2019,236,97,11],
+  ["MU",2020,221,18,1],["MU",2021,220,17,0],["MU",2022,218,77,9],["MU",2023,221,76,13],
+  ["MU",2024,227,54,16],["MU",2025,248,159,33],
+  ["NVDA",2012,297,14,1],["NVDA",2013,281,94,10],["NVDA",2014,264,57,10],["NVDA",2015,218,67,12],
+  ["NVDA",2016,227,86,19],["NVDA",2017,223,71,19],["NVDA",2018,200,83,29],["NVDA",2019,197,126,33],
+  ["NVDA",2020,182,84,24],["NVDA",2021,215,115,27],["NVDA",2022,208,156,38],["NVDA",2023,217,174,45],
+  ["NVDA",2024,235,174,63],["NVDA",2025,241,180,67],["NVDA",2026,234,194,69],
+  ["PG",2012,218,20,0],["PG",2013,216,21,0],["PG",2014,224,20,0],["PG",2015,219,19,0],
+  ["PG",2016,219,22,0],["PG",2017,222,21,0],["PG",2018,226,18,0],["PG",2019,225,20,0],
+  ["PG",2020,219,17,0],["PG",2021,222,18,0],["PG",2022,214,17,0],["PG",2023,198,22,0],
+  ["PG",2024,205,40,4],["PG",2025,205,39,4],["PG",2026,203,40,7],
+  ["TEAM",2016,341,16,0],["TEAM",2017,329,18,0],["TEAM",2018,351,19,1],["TEAM",2019,359,19,0],
+  ["TEAM",2020,368,19,1],["TEAM",2021,394,21,0],["TEAM",2022,390,20,0],["TEAM",2023,292,39,5],
+  ["TEAM",2024,284,119,22],["TEAM",2025,270,116,35],["TEAM",2026,286,168,57],
+  ["WM",2012,375,19,0],["WM",2013,378,21,0],["WM",2014,404,20,0],["WM",2015,388,21,0],
+  ["WM",2016,375,19,0],["WM",2017,362,18,0],["WM",2018,327,15,0],["WM",2019,320,20,0],
+  ["WM",2020,327,18,0],["WM",2021,362,17,0],["WM",2022,340,19,0],["WM",2023,350,17,1],
+  ["WM",2024,373,39,2],["WM",2025,422,38,4],["WM",2026,373,41,5],
+];
+const FILING_BY_KEY = {};
+FILING_DATA.forEach(([ticker,year,total,classified,hits]) => { FILING_BY_KEY[`${ticker}_${year}`] = {total,classified,hits}; });
+
+function colorOf(varName){
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
+function renderSurvivalChart(){
+  const svg = document.getElementById("survivalChart");
+  const W = 900, H = 400;
+  const padL = 44, padR = 20, padT = 20, padB = 40;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxDocs = 127;
+  const n = ROUND_DATA.length;
+  const barW = plotW / n * 0.6;
+  const gap = plotW / n;
+
+  let s = "";
+  [0, 25, 50, 75, 100, 127].forEach(v => {
+    const y = padT + plotH - (plotH * v) / maxDocs;
+    s += `<line class="gridline" x1="${padL}" x2="${W-padR}" y1="${y}" y2="${y}"/>`;
+    s += `<text class="axis-label" x="${padL-8}" y="${y+3}" text-anchor="end">${v}</text>`;
+  });
+
+  ROUND_DATA.forEach((d, i) => {
+    const x = padL + gap*i + (gap-barW)/2;
+    const h = (plotH * d.docs) / maxDocs;
+    const y = padT + plotH - h;
+    s += `<rect class="bar-doc" x="${x}" y="${y}" width="${barW}" height="${Math.max(h,2)}"/>`;
+    s += `<text class="bar-label" x="${x+barW/2}" y="${y-8}">${d.docs}</text>`;
+    s += `<text class="bar-sub" x="${x+barW/2}" y="${padT+plotH+18}">R${d.round}</text>`;
+  });
+
+  svg.innerHTML = s;
+}
+
+function renderHeatmap(elementId, valueFn, maxPct){
+  const el = document.getElementById(elementId);
+  let head = "<thead><tr><th></th>" + COMPANY_ORDER.map(t => `<th>${t}</th>`).join("") + "</tr></thead>";
+  let body = "<tbody>" + YEARS.map(year => {
+    const cells = COMPANY_ORDER.map(ticker => {
+      const d = FILING_BY_KEY[`${ticker}_${year}`];
+      if (!d) return `<td><div class="heat-cell heat-empty">·</div></td>`;
+      const pct = valueFn(d);
+      const alpha = Math.min(100, Math.round((pct / maxPct) * 100));
+      const bg = `color-mix(in srgb, var(--kept) ${alpha}%, var(--panel))`;
+      const textColor = alpha > 55 ? "#fff" : "var(--ink)";
+      return `<td><div class="heat-cell" style="background:${bg}; color:${textColor}">${Math.round(pct)}%</div></td>`;
+    }).join("");
+    return `<tr><th class="mono">${year}</th>${cells}</tr>`;
+  }).join("") + "</tbody>";
+  el.innerHTML = head + body;
+}
+
+function renderHeatmaps(){
+  renderHeatmap("heatClassified", d => (d.classified / d.total) * 100, 85);
+  renderHeatmap("heatHits", d => (d.hits / d.total) * 100, 35);
+}
+
+const CASE_SNIPPETS = [
+  "Quadro for professional workstations / Tesla for supercomputing servers and workstations / GRID Graphics Modules for industry-standard servers",
+  "Mobile computing devices in various form factors are expected to continue to drive the user experience. According to Strategy Analytics, more than…",
+  "We recently announced Project SHIELD, an NVIDIA developed and branded mobile device…",
+  "GPU business revenue increased by 2.0% to $3,251.7 million for fiscal year 2013 when compared to $3,186.8 million for fiscal year…",
+  "Our GPU business leverages our GPU technology across multiple end markets. It now comprises of four primary product lines, including GeForce for desktop and no…",
+];
+
+function renderCase(){
+  const el = document.getElementById("caseSnippets");
+  el.innerHTML = CASE_SNIPPETS.map(txt =>
+    `<div class="snippet"><span class="tag">ai=0</span><span class="txt">${txt}</span></div>`
+  ).join("");
+  document.getElementById("caseMore").textContent = "+ 6 more candidates, all ai_associated = 0 (semiconductor supply chain, R&D process, security risk factors, market-acceptance risk)";
+}
+
+renderSurvivalChart();
+renderHeatmaps();
+renderCase();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { renderSurvivalChart(); renderHeatmaps(); });
+</script>

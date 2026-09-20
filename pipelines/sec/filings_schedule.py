@@ -5,7 +5,17 @@ from shared.edgar import fetch_all_filings
 from shared.ids import content_id_for
 from shared.universe import get_cik_universe
 
-FORM_TYPES = ["8-K", "10-Q", "10-K", "S-4", "8-K/A", "10-K/A", "10-Q/A", "S-4/A", "20-F", "20-F/A"]
+FORM_TYPES = [
+    "8-K", "10-Q", "10-K", "S-4", "8-K/A", "10-K/A", "10-Q/A", "S-4/A", "20-F", "20-F/A",
+    # 6-K: the interim/quarterly-equivalent report for a 20-F foreign private
+    # issuer (no 10-Q equivalent exists for them). Relevant here only for
+    # TEAM/Atlassian, which filed 20-F 2016-2022 while still UK-incorporated
+    # before redomiciling to Delaware and switching to 10-K. Unlike 8-K, 6-K
+    # has no standardized SEC "items" taxonomy to filter on, so it's not
+    # added to EIGHT_K_FORMS -- every 6-K that's filed passes through, same
+    # as 10-Q/10-K/20-F.
+    "6-K", "6-K/A",
+]
 START_DATE = "2012-01-01"
 DATA_SOURCE = "sec_edgar"
 
