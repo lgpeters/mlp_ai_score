@@ -28,7 +28,7 @@ _sia = SentimentIntensityAnalyzer()
 # network). Each score_document() call opens its own DB connection and does
 # its own Storage fetch, so documents are safe to process concurrently; the
 # only shared state is _sia, which is read-only (stateless scoring calls).
-MAX_WORKERS = 10
+MAX_WORKERS = 5
 
 PENDING_SQL = """
     select ci.chunk_id, ci.content_id, ci.start_offset, ci.end_offset, c.type, c.storage_path

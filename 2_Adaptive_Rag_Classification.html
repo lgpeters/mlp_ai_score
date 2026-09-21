@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adaptive RAG Classification</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F6; --panel:#FFFFFF; --ink:#12181F; --muted:#5B6773; --line:#DEE4E8; --kept:#1F9D77;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#10151A; --panel:#171E25; --ink:#E9EEF2; --muted:#8B9AA6; --line:#2A343D; }
+}
+:root[data-theme="dark"]{ --bg:#10151A; --panel:#171E25; --ink:#E9EEF2; --muted:#8B9AA6; --line:#2A343D; }
+*{box-sizing:border-box}
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Archivo", system-ui, sans-serif; padding-inline:24px; padding-block:40px 60px; }
+.wrap{max-width:820px; margin:0 auto; display:flex; flex-direction:column; gap:32px}
+.mono{font-family:"JetBrains Mono", "SF Mono", monospace; font-variant-numeric:tabular-nums}
+
+h1{margin:0; font-size:1.9rem; font-weight:700; letter-spacing:-0.015em; text-wrap:balance}
+h2{margin:0 0 12px; font-size:1.05rem; font-weight:600; letter-spacing:-0.005em}
+
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:22px clamp(14px,3vw,28px)}
+
+ol.procedure{ margin:0; padding-left:1.4em; display:flex; flex-direction:column; gap:10px; font-size:0.98rem; line-height:1.55 }
+ol.procedure li b{ color:var(--ink) }
+ol.procedure .mono{ font-size:0.92em; background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 5px }
+
+.heat-caption{font-size:0.9rem; font-weight:600; margin-bottom:10px}
+.heatmap-wrap{overflow-x:auto}
+table.heatmap{border-collapse:collapse; width:100%; min-width:640px}
+table.heatmap th, table.heatmap td{padding:0; text-align:center}
+table.heatmap thead th{
+  font-family:"JetBrains Mono", monospace; font-size:11px; font-weight:600; color:var(--muted);
+  padding:0 4px 8px; text-transform:uppercase; letter-spacing:0.03em;
+}
+table.heatmap thead th:first-child{text-align:left}
+table.heatmap tbody th{
+  font-family:"JetBrains Mono", monospace; font-size:11.5px; font-weight:500; color:var(--muted);
+  text-align:left; padding-right:10px; white-space:nowrap;
+}
+table.heatmap td{padding:2px}
+.heat-cell{
+  display:flex; align-items:center; justify-content:center;
+  height:28px; border-radius:5px; font-family:"JetBrains Mono", monospace;
+  font-size:11px; font-weight:600;
+}
+.heat-empty{color:var(--line); font-size:11px}
+
+@media (max-width:520px){ h1{font-size:1.5rem} .panel{padding-inline:12px} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Adaptive RAG Classification</h1>
+  </header>
+
+  <div class="panel">
+    <h2>Procedure</h2>
+    <ol class="procedure">
+      <li>Embed every content chunk using a lightweight financial embedding model &mdash; <b><span class="mono">FinLang/finance-embeddings-investopedia</span></b>.</li>
+      <li>Per document, run 5 key search terms and return the top 5 matches each, with deduplication.</li>
+      <li>Batch API call to the Haiku LLM.</li>
+      <li>Documents below the hit-rate threshold are dropped &mdash; search continues on the remainder.</li>
+      <li>Repeat until all content is exhaustively searched and classified.</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>SEC Annual Reports example:</h2>
+    <div class="panel">
+      <div class="heat-caption">% Chunks Searched</div>
+      <div class="heatmap-wrap"><table class="heatmap" id="heatClassified"></table></div>
+    </div>
+    <div style="height:16px"></div>
+    <div class="panel">
+      <div class="heat-caption">% Chunks AI</div>
+      <div class="heatmap-wrap"><table class="heatmap" id="heatHits"></table></div>
+    </div>
+  </div>
+</div>
+
+<script id="report-data" type="application/json">{"company_order": ["NVDA", "INTC", "ADBE", "MU", "DELL", "TEAM", "CAT", "PG", "WM"], "years": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026], "filings": [{"ticker": "ADBE", "year": 2012, "total": 351, "classified": 21, "hits": 0}, {"ticker": "ADBE", "year": 2013, "total": 349, "classified": 21, "hits": 0}, {"ticker": "ADBE", "year": 2014, "total": 282, "classified": 19, "hits": 1}, {"ticker": "ADBE", "year": 2015, "total": 297, "classified": 17, "hits": 0}, {"ticker": "ADBE", "year": 2016, "total": 291, "classified": 18, "hits": 0}, {"ticker": "ADBE", "year": 2017, "total": 279, "classified": 19, "hits": 1}, {"ticker": "ADBE", "year": 2018, "total": 269, "classified": 17, "hits": 1}, {"ticker": "ADBE", "year": 2019, "total": 278, "classified": 33, "hits": 4}, {"ticker": "ADBE", "year": 2020, "total": 286, "classified": 140, "hits": 23}, {"ticker": "ADBE", "year": 2021, "total": 299, "classified": 164, "hits": 26}, {"ticker": "ADBE", "year": 2022, "total": 250, "classified": 82, "hits": 16}, {"ticker": "ADBE", "year": 2023, "total": 244, "classified": 116, "hits": 21}, {"ticker": "ADBE", "year": 2024, "total": 251, "classified": 160, "hits": 46}, {"ticker": "ADBE", "year": 2025, "total": 255, "classified": 178, "hits": 59}, {"ticker": "ADBE", "year": 2026, "total": 231, "classified": 157, "hits": 44}, {"ticker": "CAT", "year": 2012, "total": 91, "classified": 15, "hits": 0}, {"ticker": "CAT", "year": 2013, "total": 92, "classified": 15, "hits": 0}, {"ticker": "CAT", "year": 2014, "total": 92, "classified": 17, "hits": 0}, {"ticker": "CAT", "year": 2015, "total": 100, "classified": 13, "hits": 0}, {"ticker": "CAT", "year": 2016, "total": 384, "classified": 15, "hits": 0}, {"ticker": "CAT", "year": 2017, "total": 410, "classified": 60, "hits": 4}, {"ticker": "CAT", "year": 2018, "total": 393, "classified": 39, "hits": 4}, {"ticker": "CAT", "year": 2019, "total": 389, "classified": 19, "hits": 1}, {"ticker": "CAT", "year": 2020, "total": 375, "classified": 16, "hits": 1}, {"ticker": "CAT", "year": 2021, "total": 341, "classified": 15, "hits": 0}, {"ticker": "CAT", "year": 2022, "total": 321, "classified": 16, "hits": 0}, {"ticker": "CAT", "year": 2023, "total": 314, "classified": 17, "hits": 0}, {"ticker": "CAT", "year": 2024, "total": 309, "classified": 58, "hits": 4}, {"ticker": "CAT", "year": 2025, "total": 313, "classified": 37, "hits": 3}, {"ticker": "CAT", "year": 2026, "total": 313, "classified": 57, "hits": 4}, {"ticker": "DELL", "year": 2012, "total": 270, "classified": 16, "hits": 0}, {"ticker": "DELL", "year": 2013, "total": 392, "classified": 15, "hits": 0}, {"ticker": "DELL", "year": 2017, "total": 438, "classified": 15, "hits": 0}, {"ticker": "DELL", "year": 2018, "total": 443, "classified": 15, "hits": 0}, {"ticker": "DELL", "year": 2019, "total": 464, "classified": 17, "hits": 0}, {"ticker": "DELL", "year": 2020, "total": 467, "classified": 21, "hits": 1}, {"ticker": "DELL", "year": 2021, "total": 427, "classified": 35, "hits": 4}, {"ticker": "DELL", "year": 2022, "total": 378, "classified": 18, "hits": 1}, {"ticker": "DELL", "year": 2023, "total": 366, "classified": 83, "hits": 8}, {"ticker": "DELL", "year": 2024, "total": 352, "classified": 82, "hits": 14}, {"ticker": "DELL", "year": 2025, "total": 348, "classified": 164, "hits": 35}, {"ticker": "DELL", "year": 2026, "total": 334, "classified": 124, "hits": 33}, {"ticker": "INTC", "year": 2012, "total": 280, "classified": 18, "hits": 0}, {"ticker": "INTC", "year": 2013, "total": 281, "classified": 19, "hits": 0}, {"ticker": "INTC", "year": 2014, "total": 292, "classified": 16, "hits": 0}, {"ticker": "INTC", "year": 2015, "total": 296, "classified": 16, "hits": 0}, {"ticker": "INTC", "year": 2016, "total": 314, "classified": 18, "hits": 0}, {"ticker": "INTC", "year": 2017, "total": 271, "classified": 37, "hits": 2}, {"ticker": "INTC", "year": 2018, "total": 256, "classified": 37, "hits": 3}, {"ticker": "INTC", "year": 2019, "total": 294, "classified": 189, "hits": 28}, {"ticker": "INTC", "year": 2020, "total": 303, "classified": 185, "hits": 35}, {"ticker": "INTC", "year": 2021, "total": 319, "classified": 118, "hits": 28}, {"ticker": "INTC", "year": 2022, "total": 327, "classified": 189, "hits": 32}, {"ticker": "INTC", "year": 2023, "total": 339, "classified": 141, "hits": 29}, {"ticker": "INTC", "year": 2024, "total": 346, "classified": 142, "hits": 49}, {"ticker": "INTC", "year": 2025, "total": 337, "classified": 204, "hits": 44}, {"ticker": "INTC", "year": 2026, "total": 364, "classified": 186, "hits": 48}, {"ticker": "MU", "year": 2012, "total": 259, "classified": 18, "hits": 1}, {"ticker": "MU", "year": 2013, "total": 315, "classified": 18, "hits": 1}, {"ticker": "MU", "year": 2014, "total": 283, "classified": 39, "hits": 4}, {"ticker": "MU", "year": 2015, "total": 252, "classified": 17, "hits": 0}, {"ticker": "MU", "year": 2016, "total": 258, "classified": 18, "hits": 0}, {"ticker": "MU", "year": 2017, "total": 242, "classified": 20, "hits": 1}, {"ticker": "MU", "year": 2018, "total": 236, "classified": 131, "hits": 15}, {"ticker": "MU", "year": 2019, "total": 236, "classified": 97, "hits": 11}, {"ticker": "MU", "year": 2020, "total": 221, "classified": 18, "hits": 1}, {"ticker": "MU", "year": 2021, "total": 220, "classified": 17, "hits": 0}, {"ticker": "MU", "year": 2022, "total": 218, "classified": 77, "hits": 9}, {"ticker": "MU", "year": 2023, "total": 221, "classified": 76, "hits": 13}, {"ticker": "MU", "year": 2024, "total": 227, "classified": 54, "hits": 16}, {"ticker": "MU", "year": 2025, "total": 248, "classified": 159, "hits": 33}, {"ticker": "NVDA", "year": 2012, "total": 297, "classified": 14, "hits": 1}, {"ticker": "NVDA", "year": 2013, "total": 281, "classified": 94, "hits": 10}, {"ticker": "NVDA", "year": 2014, "total": 264, "classified": 57, "hits": 10}, {"ticker": "NVDA", "year": 2015, "total": 218, "classified": 67, "hits": 12}, {"ticker": "NVDA", "year": 2016, "total": 227, "classified": 86, "hits": 19}, {"ticker": "NVDA", "year": 2017, "total": 223, "classified": 71, "hits": 19}, {"ticker": "NVDA", "year": 2018, "total": 200, "classified": 83, "hits": 29}, {"ticker": "NVDA", "year": 2019, "total": 197, "classified": 126, "hits": 33}, {"ticker": "NVDA", "year": 2020, "total": 182, "classified": 84, "hits": 24}, {"ticker": "NVDA", "year": 2021, "total": 215, "classified": 115, "hits": 27}, {"ticker": "NVDA", "year": 2022, "total": 208, "classified": 156, "hits": 38}, {"ticker": "NVDA", "year": 2023, "total": 217, "classified": 174, "hits": 45}, {"ticker": "NVDA", "year": 2024, "total": 235, "classified": 174, "hits": 63}, {"ticker": "NVDA", "year": 2025, "total": 241, "classified": 180, "hits": 67}, {"ticker": "NVDA", "year": 2026, "total": 234, "classified": 194, "hits": 69}, {"ticker": "PG", "year": 2012, "total": 218, "classified": 20, "hits": 0}, {"ticker": "PG", "year": 2013, "total": 216, "classified": 21, "hits": 0}, {"ticker": "PG", "year": 2014, "total": 224, "classified": 20, "hits": 0}, {"ticker": "PG", "year": 2015, "total": 219, "classified": 19, "hits": 0}, {"ticker": "PG", "year": 2016, "total": 219, "classified": 22, "hits": 0}, {"ticker": "PG", "year": 2017, "total": 222, "classified": 21, "hits": 0}, {"ticker": "PG", "year": 2018, "total": 226, "classified": 18, "hits": 0}, {"ticker": "PG", "year": 2019, "total": 225, "classified": 20, "hits": 0}, {"ticker": "PG", "year": 2020, "total": 439, "classified": 17, "hits": 0}, {"ticker": "PG", "year": 2021, "total": 222, "classified": 18, "hits": 0}, {"ticker": "PG", "year": 2022, "total": 214, "classified": 17, "hits": 0}, {"ticker": "PG", "year": 2023, "total": 198, "classified": 22, "hits": 0}, {"ticker": "PG", "year": 2024, "total": 205, "classified": 40, "hits": 4}, {"ticker": "PG", "year": 2025, "total": 205, "classified": 39, "hits": 4}, {"ticker": "PG", "year": 2026, "total": 203, "classified": 40, "hits": 7}, {"ticker": "TEAM", "year": 2016, "total": 341, "classified": 16, "hits": 0}, {"ticker": "TEAM", "year": 2017, "total": 329, "classified": 18, "hits": 0}, {"ticker": "TEAM", "year": 2018, "total": 351, "classified": 19, "hits": 1}, {"ticker": "TEAM", "year": 2019, "total": 359, "classified": 19, "hits": 0}, {"ticker": "TEAM", "year": 2020, "total": 368, "classified": 19, "hits": 1}, {"ticker": "TEAM", "year": 2021, "total": 394, "classified": 21, "hits": 0}, {"ticker": "TEAM", "year": 2022, "total": 390, "classified": 20, "hits": 0}, {"ticker": "TEAM", "year": 2023, "total": 292, "classified": 39, "hits": 5}, {"ticker": "TEAM", "year": 2024, "total": 284, "classified": 119, "hits": 22}, {"ticker": "TEAM", "year": 2025, "total": 270, "classified": 116, "hits": 35}, {"ticker": "TEAM", "year": 2026, "total": 286, "classified": 168, "hits": 57}, {"ticker": "WM", "year": 2012, "total": 375, "classified": 19, "hits": 0}, {"ticker": "WM", "year": 2013, "total": 378, "classified": 21, "hits": 0}, {"ticker": "WM", "year": 2014, "total": 404, "classified": 20, "hits": 0}, {"ticker": "WM", "year": 2015, "total": 388, "classified": 21, "hits": 0}, {"ticker": "WM", "year": 2016, "total": 375, "classified": 19, "hits": 0}, {"ticker": "WM", "year": 2017, "total": 362, "classified": 18, "hits": 0}, {"ticker": "WM", "year": 2018, "total": 327, "classified": 15, "hits": 0}, {"ticker": "WM", "year": 2019, "total": 320, "classified": 20, "hits": 0}, {"ticker": "WM", "year": 2020, "total": 327, "classified": 18, "hits": 0}, {"ticker": "WM", "year": 2021, "total": 362, "classified": 17, "hits": 0}, {"ticker": "WM", "year": 2022, "total": 347, "classified": 19, "hits": 0}, {"ticker": "WM", "year": 2023, "total": 350, "classified": 17, "hits": 1}, {"ticker": "WM", "year": 2024, "total": 373, "classified": 39, "hits": 2}, {"ticker": "WM", "year": 2025, "total": 422, "classified": 38, "hits": 4}, {"ticker": "WM", "year": 2026, "total": 373, "classified": 41, "hits": 5}]}</script>
+<script>
+const report = JSON.parse(document.getElementById("report-data").textContent);
+const COMPANY_ORDER = report.company_order;
+const YEARS = report.years;
+const FILING_BY_KEY = {};
+report.filings.forEach(f => { FILING_BY_KEY[`${f.ticker}_${f.year}`] = f; });
+
+function renderHeatmap(elementId, valueFn, maxPct){
+  const el = document.getElementById(elementId);
+  let head = "<thead><tr><th></th>" + COMPANY_ORDER.map(t => `<th>${t}</th>`).join("") + "</tr></thead>";
+  let body = "<tbody>" + YEARS.map(year => {
+    const cells = COMPANY_ORDER.map(ticker => {
+      const d = FILING_BY_KEY[`${ticker}_${year}`];
+      if (!d || d.total === 0) return `<td><div class="heat-cell heat-empty">&middot;</div></td>`;
+      const pct = valueFn(d);
+      const alpha = Math.min(100, Math.round((pct / maxPct) * 100));
+      const bg = `color-mix(in srgb, var(--kept) ${alpha}%, var(--panel))`;
+      const textColor = alpha > 55 ? "#fff" : "var(--ink)";
+      return `<td><div class="heat-cell" style="background:${bg}; color:${textColor}">${Math.round(pct)}%</div></td>`;
+    }).join("");
+    return `<tr><th class="mono">${year}</th>${cells}</tr>`;
+  }).join("") + "</tbody>";
+  el.innerHTML = head + body;
+}
+
+renderHeatmap("heatClassified", d => (d.classified / d.total) * 100, 85);
+renderHeatmap("heatHits", d => (d.hits / d.total) * 100, 35);
+</script>
+
+</body>
+</html>

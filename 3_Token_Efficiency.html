@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Token Efficiency Report</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0da; --text: #24231f;
+    --muted: #6b6a64; --accent: #a8560f; --accent-soft: #f4e6d8; --code-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.5rem 4rem; background: var(--bg); color: var(--text);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; line-height: 1.55;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2.5rem; }
+  .subtitle code { font-family: "SF Mono", Menlo, monospace; font-size: 0.85em; }
+
+  section.stage {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.75rem 2rem; margin-bottom: 2.5rem;
+  }
+  h2 { font-size: 1.3rem; margin: 0 0 0.3rem; }
+  h2 .model { font-size: 0.85rem; color: var(--muted); font-weight: 400; font-family: -apple-system, sans-serif; }
+  .stage-desc { color: var(--text); font-size: 0.98rem; margin: 0.5rem 0 1.2rem; }
+
+  .cost-card {
+    display: inline-flex; align-items: baseline; gap: 0.5rem; background: var(--accent-soft);
+    border-radius: 8px; padding: 0.7rem 1.1rem; margin-bottom: 1rem;
+  }
+  .cost-card .amount { font-family: "SF Mono", Menlo, monospace; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+  .cost-card .cost-label { font-family: -apple-system, sans-serif; font-size: 0.82rem; color: var(--muted); }
+
+  .flag-note {
+    font-family: -apple-system, sans-serif; font-size: 0.78rem; color: var(--muted);
+    background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 4px;
+    padding: 0.6rem 0.85rem; margin-bottom: 1.2rem;
+  }
+
+  h3 { font-family: -apple-system, sans-serif; font-size: 0.85rem; margin: 1.6rem 0 0.6rem; color: var(--text); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; font-family: -apple-system, sans-serif; font-size: 0.75rem; margin-bottom: 0.6rem; color: var(--muted); }
+  .legend .swatch { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 2px; margin-right: 0.3rem; vertical-align: middle; }
+
+  .chart-wrap { overflow-x: auto; }
+  .axis-caption { font-family: -apple-system, sans-serif; font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; }
+  .final-note {
+    font-family: -apple-system, sans-serif; font-size: 0.85rem; color: var(--text);
+    margin-top: 0.7rem; padding: 0.6rem 0.85rem; background: var(--accent-soft); border-radius: 6px;
+  }
+  .final-note-badge {
+    display: inline-block; background: var(--accent); color: white; font-size: 0.68rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; padding: 0.15rem 0.45rem;
+    border-radius: 4px; margin-right: 0.4rem;
+  }
+
+  table.usage-table {
+    width: 100%; border-collapse: collapse; font-family: -apple-system, sans-serif; font-size: 0.82rem;
+    margin-top: 0.5rem;
+  }
+  table.usage-table th {
+    text-align: right; padding: 0.5rem 0.7rem; background: var(--code-bg); color: var(--muted);
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 600;
+  }
+  table.usage-table th:first-child, table.usage-table td:first-child { text-align: left; }
+  table.usage-table td { text-align: right; padding: 0.45rem 0.7rem; border-top: 1px solid var(--border); font-family: "SF Mono", Menlo, monospace; }
+  table.usage-table tfoot td { font-weight: 700; border-top: 2px solid var(--border); }
+
+  .prompt-picker { margin: 1rem 0 0.6rem; }
+  .prompt-picker select {
+    font-family: -apple-system, sans-serif; font-size: 0.85rem; padding: 0.4rem 0.6rem;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--panel); color: var(--text);
+  }
+  pre.prompt-box {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.2rem; font-family: "SF Mono", Menlo, monospace; font-size: 0.78rem;
+    white-space: pre-wrap; word-wrap: break-word; max-height: 420px; overflow-y: auto; margin: 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Token Efficiency Report</h1>
+  <div class="subtitle">Generated <code id="generated-at"></code>. Real token usage and cost, pulled live from batch request tracking.</div>
+
+  <section class="stage" id="stage-1"></section>
+  <section class="stage" id="stage-2"></section>
+</div>
+
+<script id="report-data" type="application/json">{"generated_at": "2026-09-21T00:37:55.980797+00:00", "ticker_colors": {"ADBE": "#a8560f", "CAT": "#c98a2c", "DELL": "#3c6e8f", "INTC": "#2e6b3e", "MU": "#7a4fa0", "NVDA": "#5a8f3c", "PG": "#b3352b", "TEAM": "#4a4a86", "WM": "#8a8a3c"}, "company_names": {"ADBE": "Adobe Inc", "CAT": "Caterpillar Inc", "DELL": "Dell Inc", "INTC": "Intel Corporation", "MU": "Micron Technology Inc", "NVDA": "Nvidia Corporation", "PG": "The Procter & Gamble Company", "TEAM": "Atlassian Corporation", "WM": "Waste Management Inc"}, "stage_1": {"input_tokens": 31480893, "output_tokens": 1028674, "tracked_cost": 18.31, "untracked_note": "Cost tracking was switched on partway through this stage, so the earliest rounds (rounds 1-5) aren't included in the $18.31 figure above -- the real cost is a little higher. This has no effect on the charts below, which count every round from the start.", "sec_chart": {"rounds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "series": [{"round": 1, "by_ticker": {"ADBE": 1003, "CAT": 974, "DELL": 777, "INTC": 932, "MU": 937, "NVDA": 860, "PG": 957, "TEAM": 900, "WM": 1051}}, {"round": 2, "by_ticker": {"ADBE": 470, "CAT": 291, "DELL": 380, "INTC": 544, "MU": 418, "NVDA": 977, "PG": 61, "TEAM": 259, "WM": 62}}, {"round": 3, "by_ticker": {"ADBE": 302, "CAT": 64, "DELL": 307, "INTC": 414, "MU": 286, "NVDA": 787, "TEAM": 209}}, {"round": 4, "by_ticker": {"ADBE": 243, "DELL": 156, "INTC": 277, "MU": 237, "NVDA": 531, "TEAM": 199}}, {"round": 5, "by_ticker": {"ADBE": 187, "DELL": 99, "INTC": 184, "MU": 162, "NVDA": 413, "TEAM": 163}}, {"round": 6, "by_ticker": {"ADBE": 141, "DELL": 66, "INTC": 165, "MU": 117, "NVDA": 253, "TEAM": 144}}, {"round": 7, "by_ticker": {"ADBE": 99, "DELL": 22, "INTC": 150, "MU": 86, "NVDA": 137, "TEAM": 41}}, {"round": 8, "by_ticker": {"ADBE": 87, "DELL": 20, "INTC": 100, "MU": 22, "NVDA": 103, "TEAM": 21}}, {"round": 9, "by_ticker": {"ADBE": 21, "INTC": 109, "NVDA": 77}}, {"round": 10, "by_ticker": {"INTC": 21, "NVDA": 20}}], "max_total": 8391, "final_note": "By the last round, only Intel Corporation and Nvidia Corporation were still left under review."}, "transcripts_chart": {"rounds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "series": [{"round": 1, "by_ticker": {"ADBE": 1154, "CAT": 563, "DELL": 536, "INTC": 1863, "MU": 1544, "NVDA": 1570, "PG": 896, "TEAM": 786, "WM": 1073}}, {"round": 2, "by_ticker": {"ADBE": 685, "CAT": 284, "DELL": 432, "INTC": 1253, "MU": 797, "NVDA": 1351, "PG": 153, "TEAM": 362, "WM": 93}}, {"round": 3, "by_ticker": {"ADBE": 387, "CAT": 55, "DELL": 202, "INTC": 554, "MU": 264, "NVDA": 755, "PG": 45, "TEAM": 149, "WM": 14}}, {"round": 4, "by_ticker": {"ADBE": 166, "CAT": 25, "DELL": 38, "INTC": 243, "MU": 59, "NVDA": 236, "PG": 17, "TEAM": 38}}, {"round": 5, "by_ticker": {"ADBE": 98, "CAT": 13, "DELL": 15, "INTC": 143, "MU": 24, "NVDA": 77, "TEAM": 18}}, {"round": 6, "by_ticker": {"ADBE": 51, "DELL": 2, "INTC": 110, "MU": 9, "NVDA": 35, "TEAM": 4}}, {"round": 7, "by_ticker": {"ADBE": 15, "INTC": 74, "NVDA": 11}}, {"round": 8, "by_ticker": {"ADBE": 9, "INTC": 40}}, {"round": 9, "by_ticker": {"ADBE": 5, "INTC": 21}}, {"round": 10, "by_ticker": {"INTC": 14}}], "max_total": 9985, "final_note": "By the last round, Intel Corporation was the only company left under review."}}, "stage_2": {"by_type": [{"type": "hackernews", "label": "News", "requests": 60, "input_tokens": 51028, "output_tokens": 47520, "cache_hit_tokens": 121681, "cache_write_tokens": 2014, "cost": 0.3}, {"type": "sec_filing", "label": "SEC Filings", "requests": 359, "input_tokens": 1600404, "output_tokens": 123343, "cache_hit_tokens": 184095, "cache_write_tokens": 612920, "cost": 3.46}, {"type": "transcripts", "label": "Transcripts", "requests": 360, "input_tokens": 1849231, "output_tokens": 122365, "cache_hit_tokens": 336953, "cache_write_tokens": 459111, "cost": 3.41}], "tracked_cost": 7.18, "canceled_batch": {"batch_id": "msgbatch_017S5ukBiQDxgsB9erC1Ejvj", "succeeded_requests": 65, "canceled_requests": 1, "cost": 0.52, "note": "This batch was stopped early because it looked stuck -- it wasn't; 65 of its 66 requests had actually already finished. Its cost is still counted here, even though the results themselves couldn't be recovered afterwards and those items simply had to be processed again."}, "total_cost": 7.7, "example_ticker": "CAT", "example_prompts": {"News": "Here is your only Goal.\n\nFor the provided content that we can guarantee is relevant for the stated Company's AI related narrative you have to respond with 3 components.\n\nEach score should be an integer in the inclusive range stated, where the definitions defining the endpoints and middle point of each scoring distribution are defined below.\n# ai_category : [1 <-> 6]\n# ai_materiality_score : [1 <-> 10]\n# ai_saliency_score : [-3 <-> +3] \n\n# ai_category\n(i) AI Partnership:\nA clear announcement or positive comment on an accquisition, M&A deal or partnership with LLM infra/compute provider. The materiality to the core business is likely unclear.\n\n(ii) Operational Efficiencies:\nClear commentary that adoption or internal utilisation of AI is generating procedural efficiencies within the business, increased margins, improved procedural velocity.\n\n(iii) Restructuring:\nAn indication that AI is impacting on the business' organisationl chart, headcount, hiring or salary costs.\n\n(iv) Clear Positive:\nA clear statement of positive exposure to AI \u2014 e.g. AI-driven Revenue, Demand or improved Margins in a company's end-markets.\n\n(v) Clear Negative:\nA clear statement of negative exposure to AI \u2014 e.g. Budgets displaced by AI spending, or AI eroding a company's end-market, threats from new entrants, pricing pressure, AI indicated as a direct risk to a product category.\n\n(vi) Product Roadmap:\nA statement indicating that the business is releasing genuinely novel product categories or engaing in genuine R&D efforts to implement AI into it's good/services.\n\n## The ai_materiality_score and ai_saliency_score reflect a judgement about the importance of the AI Machine Learning related component of the text snippet for the company's business performance as it sensibly relates to the business' ongoing operations, financial performance. This should be contextualised using the attached description of the company's normal operations.\n\n# ai_materiality_score\nThis is a judgement of the importance/impact size of the AI related component of the text snippet for the company's performance.\n\n10 indicates that the information is extremely important to the business' core operations.\n...\n5 indicates a relatively important piece of information that will have some measurable impact but is not critical.\n...\n1 indicates that the information has litte to no importance for the company in question.\n\n\n# ai_saliency_score\n3 indicates that the AI relevant information is undeniably positive for the business.\n0 indicates that the AI relevant information does not indicate a clear valence for the business or is explicityly neutral. In many cases this will be due to an announcement relating to business strategy that could be good or bad depending on execution.\n-3 indicates that the AI relevant information is undeniably negative for the business.\n\n# AI Relevant News Story Title\nThe content you will be assessing is short News story titles about the company in question.\n\nWhen assessing this assume it is a popular story from a tech news site. Imagine the enclosing information and think about it's probably relation to the company in Question and what it means for the business.\n\nYou are assessing for company:\nCaterpillar Inc\n\nThe business description:\nCaterpillar Inc. provides construction and mining equipment, off-highway diesel and natural gas engines, industrial gas turbines, and diesel-electric locomotives in the United States and internationally. The Construction Industries segment offers asphalt pavers, cold planers, compactors, forestry machines, material handlers, motor graders, pipelayers, road reclaimers, telehandlers, track-type tractors, and track and wheel excavators; backhoe, compact track, skid steer, track-type, and wheel loaders; and related parts and work tools. Its Resource Industries segment provides electric rope and hydraulic shovels, draglines, rotary drills, hard rock vehicles, mining trucks, wheel loaders, off-highway and articulated trucks, wide-body trucks, wheel tractor scrapers and dozers, and landfill and soil compactors; machinery components, and wear and maintenance components; and technology products and services for fleet management, equipment management analytics, autonomous machine capabilities, safety services, and mining performance solutions. The Energy & Transportation segment offers reciprocating engine powered generator sets; reciprocating engines, drivetrain, and integrated systems and solutions; centrifugal gas compressors and related services; and diesel-electric locomotive components, and other rail-related products. Its Financial Products segment provides operating and finance leases, revolving charge accounts, installment sale contracts, repair/rebuild financing, working capital loans, and wholesale financing; and insurance and risk management products and services. The All Other segment offers parts distribution; logistics and distribution services; electronics and control systems; dealer portfolio management; brand management and marketing strategy; and digital investment services. It also provides mining software solutions. The company was formerly known as Caterpillar Tractor Co. Caterpillar Inc. was incorporated in 1925 and is headquartered in Irving, Texas.\n\nEach request contains multiple numbered items (Item 0, Item 1, ...). Use the classify_second_pass tool to return one result per input item, in the same order, each tagged with its index.", "SEC": "Here is your only Goal.\n\nFor the provided content that we can guarantee is relevant for the stated Company's AI related narrative you have to respond with 3 components.\n\nEach score should be an integer in the inclusive range stated, where the definitions defining the endpoints and middle point of each scoring distribution are defined below.\n# ai_category : [1 <-> 6]\n# ai_materiality_score : [1 <-> 10]\n# ai_saliency_score : [-3 <-> +3] \n\n# ai_category\n(i) AI Partnership:\nA clear announcement or positive comment on an accquisition, M&A deal or partnership with LLM infra/compute provider. The materiality to the core business is likely unclear.\n\n(ii) Operational Efficiencies:\nClear commentary that adoption or internal utilisation of AI is generating procedural efficiencies within the business, increased margins, improved procedural velocity.\n\n(iii) Restructuring:\nAn indication that AI is impacting on the business' organisationl chart, headcount, hiring or salary costs.\n\n(iv) Clear Positive:\nA clear statement of positive exposure to AI \u2014 e.g. AI-driven Revenue, Demand or improved Margins in a company's end-markets.\n\n(v) Clear Negative:\nA clear statement of negative exposure to AI \u2014 e.g. Budgets displaced by AI spending, or AI eroding a company's end-market, threats from new entrants, pricing pressure, AI indicated as a direct risk to a product category.\n\n(vi) Product Roadmap:\nA statement indicating that the business is releasing genuinely novel product categories or engaing in genuine R&D efforts to implement AI into it's good/services.\n\n## The ai_materiality_score and ai_saliency_score reflect a judgement about the importance of the AI Machine Learning related component of the text snippet for the company's business performance as it sensibly relates to the business' ongoing operations, financial performance. This should be contextualised using the attached description of the company's normal operations.\n\n# ai_materiality_score\nThis is a judgement of the importance/impact size of the AI related component of the text snippet for the company's performance.\n\n10 indicates that the information is extremely important to the business' core operations.\n...\n5 indicates a relatively important piece of information that will have some measurable impact but is not critical.\n...\n1 indicates that the information has litte to no importance for the company in question.\n\n\n# ai_saliency_score\n3 indicates that the AI relevant information is undeniably positive for the business.\n0 indicates that the AI relevant information does not indicate a clear valence for the business or is explicityly neutral. In many cases this will be due to an announcement relating to business strategy that could be good or bad depending on execution.\n-3 indicates that the AI relevant information is undeniably negative for the business.\n\n# AI Relevant SEC Filing Extract\nThis is a short paragraph excerpt taken from a company's SEC filing (10-K annual report, 10-Q quarterly report, or 20-F). It has already been confirmed to be genuinely AI-relevant.\n\nSEC content is a primary source.\n\nWhen assessing this, treat it as a snippet extracted from a much longer, formal regulatory document -- it may reference surrounding context (a table, a preceding sentence, a defined term) that isn't shown here. Judge materiality and saliency based only on what is stated in the text itself, not on speculation about what might be discussed elsewhere in the filing.\n\n\nYou are assessing for company:\nCaterpillar Inc\n\nThe business description:\nCaterpillar Inc. provides construction and mining equipment, off-highway diesel and natural gas engines, industrial gas turbines, and diesel-electric locomotives in the United States and internationally. The Construction Industries segment offers asphalt pavers, cold planers, compactors, forestry machines, material handlers, motor graders, pipelayers, road reclaimers, telehandlers, track-type tractors, and track and wheel excavators; backhoe, compact track, skid steer, track-type, and wheel loaders; and related parts and work tools. Its Resource Industries segment provides electric rope and hydraulic shovels, draglines, rotary drills, hard rock vehicles, mining trucks, wheel loaders, off-highway and articulated trucks, wide-body trucks, wheel tractor scrapers and dozers, and landfill and soil compactors; machinery components, and wear and maintenance components; and technology products and services for fleet management, equipment management analytics, autonomous machine capabilities, safety services, and mining performance solutions. The Energy & Transportation segment offers reciprocating engine powered generator sets; reciprocating engines, drivetrain, and integrated systems and solutions; centrifugal gas compressors and related services; and diesel-electric locomotive components, and other rail-related products. Its Financial Products segment provides operating and finance leases, revolving charge accounts, installment sale contracts, repair/rebuild financing, working capital loans, and wholesale financing; and insurance and risk management products and services. The All Other segment offers parts distribution; logistics and distribution services; electronics and control systems; dealer portfolio management; brand management and marketing strategy; and digital investment services. It also provides mining software solutions. The company was formerly known as Caterpillar Tractor Co. Caterpillar Inc. was incorporated in 1925 and is headquartered in Irving, Texas.\n\nEach request contains multiple numbered items (Item 0, Item 1, ...). Use the classify_second_pass tool to return one result per input item, in the same order, each tagged with its index.", "Transcripts": "Here is your only Goal.\n\nFor the provided content that we can guarantee is relevant for the stated Company's AI related narrative you have to respond with 3 components.\n\nEach score should be an integer in the inclusive range stated, where the definitions defining the endpoints and middle point of each scoring distribution are defined below.\n# ai_category : [1 <-> 6]\n# ai_materiality_score : [1 <-> 10]\n# ai_saliency_score : [-3 <-> +3] \n\n# ai_category\n(i) AI Partnership:\nA clear announcement or positive comment on an accquisition, M&A deal or partnership with LLM infra/compute provider. The materiality to the core business is likely unclear.\n\n(ii) Operational Efficiencies:\nClear commentary that adoption or internal utilisation of AI is generating procedural efficiencies within the business, increased margins, improved procedural velocity.\n\n(iii) Restructuring:\nAn indication that AI is impacting on the business' organisationl chart, headcount, hiring or salary costs.\n\n(iv) Clear Positive:\nA clear statement of positive exposure to AI \u2014 e.g. AI-driven Revenue, Demand or improved Margins in a company's end-markets.\n\n(v) Clear Negative:\nA clear statement of negative exposure to AI \u2014 e.g. Budgets displaced by AI spending, or AI eroding a company's end-market, threats from new entrants, pricing pressure, AI indicated as a direct risk to a product category.\n\n(vi) Product Roadmap:\nA statement indicating that the business is releasing genuinely novel product categories or engaing in genuine R&D efforts to implement AI into it's good/services.\n\n## The ai_materiality_score and ai_saliency_score reflect a judgement about the importance of the AI Machine Learning related component of the text snippet for the company's business performance as it sensibly relates to the business' ongoing operations, financial performance. This should be contextualised using the attached description of the company's normal operations.\n\n# ai_materiality_score\nThis is a judgement of the importance/impact size of the AI related component of the text snippet for the company's performance.\n\n10 indicates that the information is extremely important to the business' core operations.\n...\n5 indicates a relatively important piece of information that will have some measurable impact but is not critical.\n...\n1 indicates that the information has litte to no importance for the company in question.\n\n\n# ai_saliency_score\n3 indicates that the AI relevant information is undeniably positive for the business.\n0 indicates that the AI relevant information does not indicate a clear valence for the business or is explicityly neutral. In many cases this will be due to an announcement relating to business strategy that could be good or bad depending on execution.\n-3 indicates that the AI relevant information is undeniably negative for the business.\n\n# AI Relevant Earnings Call Transcript Extract\nThis is a short excerpt taken from a company's quarterly earnings call transcript. It has already been confirmed to be genuinely AI-relevant.\n\nCompany representatives are speaking directly to investors and analysts about the business -- treat their statements as forward-looking commentary on the business, not a scripted disclosure document. Analyst questions should already have been filtered out by an earlier pass; if any ambiguity remains about who is speaking, weight statements from company representatives far more heavily than analyst framing.\n\n\nYou are assessing for company:\nCaterpillar Inc\n\nThe business description:\nCaterpillar Inc. provides construction and mining equipment, off-highway diesel and natural gas engines, industrial gas turbines, and diesel-electric locomotives in the United States and internationally. The Construction Industries segment offers asphalt pavers, cold planers, compactors, forestry machines, material handlers, motor graders, pipelayers, road reclaimers, telehandlers, track-type tractors, and track and wheel excavators; backhoe, compact track, skid steer, track-type, and wheel loaders; and related parts and work tools. Its Resource Industries segment provides electric rope and hydraulic shovels, draglines, rotary drills, hard rock vehicles, mining trucks, wheel loaders, off-highway and articulated trucks, wide-body trucks, wheel tractor scrapers and dozers, and landfill and soil compactors; machinery components, and wear and maintenance components; and technology products and services for fleet management, equipment management analytics, autonomous machine capabilities, safety services, and mining performance solutions. The Energy & Transportation segment offers reciprocating engine powered generator sets; reciprocating engines, drivetrain, and integrated systems and solutions; centrifugal gas compressors and related services; and diesel-electric locomotive components, and other rail-related products. Its Financial Products segment provides operating and finance leases, revolving charge accounts, installment sale contracts, repair/rebuild financing, working capital loans, and wholesale financing; and insurance and risk management products and services. The All Other segment offers parts distribution; logistics and distribution services; electronics and control systems; dealer portfolio management; brand management and marketing strategy; and digital investment services. It also provides mining software solutions. The company was formerly known as Caterpillar Tractor Co. Caterpillar Inc. was incorporated in 1925 and is headquartered in Irving, Texas.\n\nEach request contains multiple numbered items (Item 0, Item 1, ...). Use the classify_second_pass tool to return one result per input item, in the same order, each tagged with its index."}}}</script>
+<script>
+const report = JSON.parse(document.getElementById("report-data").textContent);
+document.getElementById("generated-at").textContent = new Date(report.generated_at).toLocaleString();
+
+function fmt(n) { return (n ?? 0).toLocaleString(); }
+function money(n) { return "$" + (n ?? 0).toFixed(2); }
+
+const TICKER_ORDER = ["ADBE", "CAT", "DELL", "INTC", "MU", "NVDA", "PG", "TEAM", "WM"];
+const COLORS = report.ticker_colors;
+
+function renderLegend(tickersUsed) {
+  return `<div class="legend">` + tickersUsed.map(t =>
+    `<span><span class="swatch" style="background:${COLORS[t]}"></span>${report.company_names[t] || t}</span>`
+  ).join("") + `</div>`;
+}
+
+function renderStackedBarChart(chart, title) {
+  if (!chart.rounds.length) {
+    return `<h3>${title}</h3><div class="flag-note">No results yet for this stage.</div>`;
+  }
+
+  const tickersUsed = TICKER_ORDER.filter(t => chart.series.some(s => t in s.by_ticker));
+  const barW = 46, gap = 16, chartH = 260, labelH = 30, leftAxisW = 48;
+  const w = leftAxisW + chart.series.length * (barW + gap) + gap;
+  const h = chartH + labelH + 10;
+  const scale = chartH / (chart.max_total || 1);
+  const lastIdx = chart.series.length - 1;
+
+  let highlight = "";
+  let bars = "";
+  chart.series.forEach((s, i) => {
+    const x = leftAxisW + gap + i * (barW + gap);
+
+    if (i === lastIdx) {
+      highlight = `<rect x="${x - 6}" y="-6" width="${barW + 12}" height="${chartH + 12}" rx="8" fill="var(--accent-soft)" opacity="0.6"/>`;
+    }
+
+    let yCursor = chartH;
+    let segs = "";
+    tickersUsed.forEach(ticker => {
+      const n = s.by_ticker[ticker] || 0;
+      if (n === 0) return;
+      const segH = n * scale;
+      yCursor -= segH;
+      segs += `<rect x="${x}" y="${yCursor}" width="${barW}" height="${segH}" fill="${COLORS[ticker]}">
+        <title>${report.company_names[ticker] || ticker} — Round ${s.round} — ${n.toLocaleString()} excerpts reviewed</title>
+      </rect>`;
+    });
+    const total = Object.values(s.by_ticker).reduce((a, b) => a + b, 0);
+    bars += segs;
+    bars += `<text x="${x + barW / 2}" y="${chartH + 19}" text-anchor="middle" font-size="12" font-family="-apple-system,sans-serif" fill="var(--muted)">${s.round}</text>`;
+    bars += `<text x="${x + barW / 2}" y="${yCursor - 6}" text-anchor="middle" font-size="10" font-family="-apple-system,sans-serif" fill="var(--text)">${total.toLocaleString()}</text>`;
+  });
+
+  // y-axis gridlines (4 ticks)
+  let grid = "";
+  for (let i = 0; i <= 4; i++) {
+    const val = Math.round(chart.max_total * i / 4);
+    const y = chartH - val * scale;
+    grid += `<line x1="${leftAxisW}" y1="${y}" x2="${w}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`;
+    grid += `<text x="${leftAxisW - 6}" y="${y + 3}" text-anchor="end" font-size="10" font-family="-apple-system,sans-serif" fill="var(--muted)">${val.toLocaleString()}</text>`;
+  }
+
+  return `
+    <h3>${title}</h3>
+    ${renderLegend(tickersUsed)}
+    <div class="chart-wrap">
+      <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+        ${highlight}
+        ${grid}
+        ${bars}
+      </svg>
+      <div class="axis-caption">Round of review (left to right = later, more narrowed-down rounds)</div>
+    </div>
+    ${chart.final_note ? `<div class="final-note"><span class="final-note-badge">Narrowed to the end</span> ${chart.final_note}</div>` : ""}
+  `;
+}
+
+function renderStage1() {
+  const s1 = report.stage_1;
+  document.getElementById("stage-1").innerHTML = `
+    <h2>Stage 1 &mdash; Wide Scan <span class="model">(AI model: Haiku 4.5)</span></h2>
+    <p class="stage-desc">A fast, cheap first read of everything we collected, run in repeated rounds. Each round, companies whose material was no longer showing real AI relevance were dropped, so later rounds cover fewer and fewer companies &mdash; concentrating the (more expensive) work in Stage 2 on only the material that's actually worth a closer look.</p>
+    <div class="cost-card"><span class="amount">${money(s1.tracked_cost)}</span><span class="cost-label">cost so far</span></div>
+    <div class="flag-note">${s1.untracked_note}</div>
+    ${renderStackedBarChart(s1.sec_chart, "SEC Filings &mdash; excerpts reviewed per round, by company")}
+    ${renderStackedBarChart(s1.transcripts_chart, "Earnings Call Transcripts &mdash; excerpts reviewed per round, by company")}
+  `;
+}
+
+function renderPromptPicker(examplePrompts, ticker) {
+  const labels = Object.keys(examplePrompts);
+  const options = labels.map((l, i) => `<option value="${l}" ${i === 0 ? "selected" : ""}>${l}</option>`).join("");
+  const name = report.company_names[ticker] || ticker;
+  return `
+    <h3>What the AI actually reads &mdash; example for ${name}</h3>
+    <p class="stage-desc">The instructions below are reused for every excerpt from the same company and content type, so they only need to be sent to the AI once per hour rather than every single time &mdash; that reuse is what "caching" refers to in the cost table below.</p>
+    <div class="prompt-picker">
+      <select id="prompt-select">${options}</select>
+    </div>
+    <pre class="prompt-box" id="prompt-box">${examplePrompts[labels[0]]}</pre>
+  `;
+}
+
+function renderUsageTable(byType) {
+  const rows = byType.map(row => `
+    <tr>
+      <td>${row.label}</td>
+      <td>${fmt(row.requests)}</td>
+      <td>${fmt(row.input_tokens)}</td>
+      <td>${fmt(row.cache_hit_tokens)}</td>
+      <td>${fmt(row.output_tokens)}</td>
+      <td>${money(row.cost)}</td>
+    </tr>
+  `).join("");
+  const totals = byType.reduce((acc, r) => ({
+    requests: acc.requests + r.requests, input: acc.input + r.input_tokens,
+    cache: acc.cache + r.cache_hit_tokens, output: acc.output + r.output_tokens, cost: acc.cost + r.cost,
+  }), {requests: 0, input: 0, cache: 0, output: 0, cost: 0});
+  return `
+    <table class="usage-table">
+      <thead><tr><th>Content Type</th><th>Batches Sent</th><th>Text Sent to AI</th><th>Reused from Cache</th><th>AI's Written Response</th><th>Cost</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td>Total</td><td>${fmt(totals.requests)}</td><td>${fmt(totals.input)}</td><td>${fmt(totals.cache)}</td><td>${fmt(totals.output)}</td><td>${money(totals.cost)}</td></tr></tfoot>
+    </table>
+    <div class="axis-caption">Figures are in tokens &mdash; roughly, pieces of a word. "Reused from Cache" is text the AI didn't have to be charged full price to re-read.</div>
+  `;
+}
+
+function renderStage2() {
+  const s2 = report.stage_2;
+  document.getElementById("stage-2").innerHTML = `
+    <h2>Stage 2 &mdash; Focused Scoring <span class="model">(AI model: Sonnet 5)</span></h2>
+    <p class="stage-desc">A closer, more careful read of only the material that survived Stage 1 &mdash; scoring how material and how positive or negative each excerpt is for the company in question.</p>
+    <div class="cost-card"><span class="amount">${money(s2.total_cost)}</span><span class="cost-label">total cost, including one run that had to be redone</span></div>
+    <div class="flag-note">
+      ${money(s2.canceled_batch.cost)} of the total above comes from a run that was stopped early and had to be redone. ${s2.canceled_batch.note}
+    </div>
+    ${renderPromptPicker(s2.example_prompts, s2.example_ticker)}
+    <h3>Usage by content type</h3>
+    ${renderUsageTable(s2.by_type)}
+  `;
+
+  document.getElementById("prompt-select").addEventListener("change", (e) => {
+    document.getElementById("prompt-box").textContent = s2.example_prompts[e.target.value];
+  });
+}
+
+renderStage1();
+renderStage2();
+</script>
+</body>
+</html>

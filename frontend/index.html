@@ -15,6 +15,15 @@
   .meta { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; }
   .markdown { max-height: 200px; overflow-y: auto; font-size: 0.85rem; }
   h2 { font-size: 1rem; }
+  hr { margin: 2.5rem 0; border: none; border-top: 1px solid #ddd; }
+  .badge { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; margin-right: 0.3rem; }
+  .badge.read { background: #d4f4dd; color: #1a7a3c; }
+  .badge.unread { background: #eee; color: #888; }
+  .fields { font-size: 0.78rem; color: #444; display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.4rem; }
+  .fields b { color: #111; }
+  .sal-pos { color: #1a7a3c; font-weight: 600; }
+  .sal-neg { color: #b3261e; font-weight: 600; }
+  .sal-zero { color: #888; }
 </style>
 </head>
 <body>
@@ -54,6 +63,9 @@ async function loadFilters() {
   for (const c of data.companies) addOption("company", c);
   for (const t of data.types) addOption("type", t);
   for (const s of data.sub_types) addOption("sub_type", s);
+  for (const c of data.companies) addOption("c_company", c);
+  for (const t of data.types) addOption("c_type", t);
+  for (const s of data.sub_types) addOption("c_sub_type", s);
 }
 
 function addOption(selectId, value) {
@@ -63,11 +75,21 @@ function addOption(selectId, value) {
   document.getElementById(selectId).appendChild(opt);
 }
 
+function flagBadge(label, val) {
+  const cls = val === true ? "read" : val === false ? "unread" : "unread";
+  const text = val === true ? label : val === false ? "not " + label : label + " ?";
+  return `<span class="badge ${cls}">${text}</span>`;
+}
+
 function renderResult(r) {
   const div = document.createElement("div");
   div.className = "result";
   div.innerHTML = `
-    <div class="meta">${r.company_name} | ${r.type}${r.sub_type ? " / " + r.sub_type : ""} | ${r.publication_date ?? "no date"} | distance: ${r.distance.toFixed(4)}</div>
+    <div class="meta">
+      ${flagBadge("company relevant", r.company_relevant)}
+      ${flagBadge("AI relevant", r.ai_relevant)}
+      ${r.company_name} | ${r.type}${r.sub_type ? " / " + r.sub_type : ""} | ${r.publication_date ?? "no date"} | distance: ${r.distance.toFixed(4)}
+    </div>
     <div class="markdown">${marked.parse(r.markdown)}</div>
   `;
   return div;
@@ -104,6 +126,115 @@ async function runSearch() {
 }
 
 loadFilters();
+</script>
+
+<hr>
+
+<h1>Classification Browser</h1>
+
+<div class="filters">
+  <select id="c_company"><option value="">All companies</option></select>
+  <select id="c_type"><option value="">All types</option></select>
+  <select id="c_sub_type"><option value="">All sub-types</option></select>
+  <select id="c_ai_category">
+    <option value="">All categories</option>
+    <option value="1">1 - AI Partnership</option>
+    <option value="2">2 - Operational Efficiencies</option>
+    <option value="3">3 - Restructuring</option>
+    <option value="4">4 - Clear Positive</option>
+    <option value="5">5 - Clear Negative</option>
+    <option value="6">6 - Product Roadmap</option>
+  </select>
+  <select id="c_sort_by">
+    <option value="ai_saliency_score">Sort by saliency</option>
+    <option value="ai_materiality_score">Sort by materiality</option>
+  </select>
+  <input type="number" id="c_min_materiality" placeholder="Min materiality" min="1" max="10" style="width:7rem">
+  <input type="date" id="c_date_from">
+  <input type="date" id="c_date_to">
+</div>
+
+<div class="filters">
+  <button onclick="runClassifications()">Show classifications</button>
+</div>
+
+<div id="c_status"></div>
+
+<div class="columns">
+  <div class="column">
+    <h2 id="c_top_label">Top 20</h2>
+    <div id="c_top"></div>
+  </div>
+  <div class="column">
+    <h2 id="c_bottom_label">Bottom 20</h2>
+    <div id="c_bottom"></div>
+  </div>
+</div>
+
+<script>
+function salClass(v) {
+  if (v > 0) return "sal-pos";
+  if (v < 0) return "sal-neg";
+  return "sal-zero";
+}
+
+function renderClassification(r) {
+  const div = document.createElement("div");
+  div.className = "result";
+  div.innerHTML = `
+    <div class="meta">
+      <span class="badge ${r.llm_read ? 'read' : 'unread'}">${r.llm_read ? "LLM Read" : "Not yet read"}</span>
+      ${r.company_name} | ${r.type}${r.sub_type ? " / " + r.sub_type : ""} | ${r.publication_date ?? "no date"}
+    </div>
+    <div class="fields">
+      <span><b>Category:</b> ${r.ai_category ?? "-"} ${r.ai_category_label ?? ""}</span>
+      <span><b>Materiality:</b> ${r.ai_materiality_score ?? "-"}/10</span>
+      <span class="${salClass(r.ai_saliency_score)}"><b>Saliency:</b> ${r.ai_saliency_score ?? "-"}</span>
+      <span><b>AI type:</b> ${r.ai_associated_label ?? "-"}</span>
+      <span><b>Company relevant:</b> ${r.company_relevant === true ? "Yes" : r.company_relevant === false ? "No" : "-"}</span>
+      <span><b>Round:</b> ${r.round ?? "-"}</span>
+      <span><b>VADER (blind baseline):</b> ${r.vader_compound != null ? r.vader_compound.toFixed(3) : "-"}</span>
+    </div>
+    <div class="markdown">${marked.parse(r.content)}</div>
+  `;
+  return div;
+}
+
+async function runClassifications() {
+  const status = document.getElementById("c_status");
+  status.textContent = "Loading...";
+
+  const body = {
+    company: document.getElementById("c_company").value,
+    type: document.getElementById("c_type").value,
+    sub_type: document.getElementById("c_sub_type").value,
+    ai_category: document.getElementById("c_ai_category").value,
+    sort_by: document.getElementById("c_sort_by").value,
+    min_materiality: document.getElementById("c_min_materiality").value,
+    date_from: document.getElementById("c_date_from").value,
+    date_to: document.getElementById("c_date_to").value,
+  };
+
+  const res = await fetch("/api/classifications", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+
+  status.textContent = `${data.total_llm_read} of ${data.total_filtered} matching chunks have been read by the LLM (second pass), sorted by ${data.sort_by}`;
+
+  const sortLabel = data.sort_by === "ai_materiality_score" ? "materiality" : "saliency";
+  document.getElementById("c_top_label").textContent = `Top 20 (highest ${sortLabel})`;
+  document.getElementById("c_bottom_label").textContent = `Bottom 20 (lowest ${sortLabel})`;
+
+  const topEl = document.getElementById("c_top");
+  const bottomEl = document.getElementById("c_bottom");
+  topEl.innerHTML = "";
+  bottomEl.innerHTML = "";
+  data.top.forEach(r => topEl.appendChild(renderClassification(r)));
+  data.bottom.forEach(r => bottomEl.appendChild(renderClassification(r)));
+}
 </script>
 
 </body>

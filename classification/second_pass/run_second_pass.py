@@ -46,16 +46,27 @@ from shared.storage import get_chunk_content
 load_dotenv()
 
 MODEL = "claude-sonnet-5"
-GROUP_SIZE = 20
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "second_pass_prompts"
 INSTRUCTIONS = (PROMPTS_DIR / "SecondPassInstructions.md").read_text()
 
-# front-matter label -> content.type value in the database. Add a row
-# here (and a matching ContentFrontMatter/<Label>.md) to extend to a new
-# source -- everything else in this module is already generic.
+# front-matter label -> {content.type, optional sub_type filter, group
+# size}. Add an entry here (and a matching ContentFrontMatter/<Label>.md)
+# to extend to a new source -- everything else in this module is already
+# generic. sub_types=None means every sub_type of that content.type
+# qualifies (e.g. SEC covers 10-K/10-Q/20-F/6-K together); a list scopes
+# to just those (e.g. Transcripts is earnings_call only, per an explicit
+# scope decision -- "other" transcripts are deliberately excluded here
+# even though they also have qualifying chunks).
+#
+# group_size is smaller for SEC/Transcripts than News: their chunks are
+# full paragraphs, not short titles, so packing 20 of them into one
+# request the way News does would make for a much bigger, riskier
+# request (more to get right in one forced-tool-use call, bigger output).
 CONTENT_TYPES = {
-    "News": "hackernews",
+    "News": {"type": "hackernews", "sub_types": None, "group_size": 20},
+    "SEC": {"type": "sec_filing", "sub_types": None, "group_size": 8},
+    "Transcripts": {"type": "transcripts", "sub_types": ["earnings_call"], "group_size": 8},
 }
 
 _TOOL_USE_INSTRUCTION = (
@@ -117,12 +128,15 @@ def _validate_results(results: list[dict], n: int) -> bool:
 
 # Only rows that already passed the cheap gate and haven't been through
 # this pass yet, for one specific (company, content_type) pair.
+# sub_types::text[] is null matches everything (News/SEC); a real array
+# (Transcripts) restricts to just those sub_types.
 PENDING_SQL = """
     select ci.chunk_id, ci.content_id, ci.start_offset, ci.end_offset, c.storage_path
     from content_index ci
     join content c using (content_id)
     left join chunk_classifications cc using (chunk_id)
     where c.company_id = %(company_id)s and c.type = %(content_type)s
+      and (%(sub_types)s::text[] is null or c.sub_type = any(%(sub_types)s))
       and cc.company_relevant = true and cc.ai_associated > 0
       and cc.ai_category is null and cc.batch_id is null
 """
@@ -163,10 +177,10 @@ def get_companies() -> list[tuple[str, str, str]]:
             return cur.fetchall()
 
 
-def get_pending(company_id: str, content_type: str) -> list[tuple]:
+def get_pending(company_id: str, content_type: str, sub_types: list[str] | None = None) -> list[tuple]:
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(PENDING_SQL, {"company_id": company_id, "content_type": content_type})
+            cur.execute(PENDING_SQL, {"company_id": company_id, "content_type": content_type, "sub_types": sub_types})
             return cur.fetchall()
 
 
@@ -222,9 +236,10 @@ def submit_batch(limit_groups_per_pair: int | None = None) -> str:
 
     requests = []
     group_chunk_ids = []
-    for content_label, content_type in CONTENT_TYPES.items():
+    for content_label, spec in CONTENT_TYPES.items():
+        content_type, sub_types, group_size = spec["type"], spec["sub_types"], spec["group_size"]
         for company_id, ticker, company_name in companies:
-            pending = get_pending(company_id, content_type)
+            pending = get_pending(company_id, content_type, sub_types)
             if not pending:
                 continue
 
@@ -232,7 +247,7 @@ def submit_batch(limit_groups_per_pair: int | None = None) -> str:
             _prewarm_cache(system_prompt)
             print(f"  pre-warmed cache for {ticker}/{content_label}")
 
-            groups = _chunk(pending, GROUP_SIZE)
+            groups = _chunk(pending, group_size)
             if limit_groups_per_pair is not None:
                 groups = groups[:limit_groups_per_pair]
 

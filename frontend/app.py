@@ -17,10 +17,12 @@ SEARCH_SQL = """
         select distinct on (ci.content_id)
             c.content_id, co.name as company_name, c.type, c.sub_type,
             c.publication_date, c.storage_path, ci.chunk_id, ci.start_offset, ci.end_offset,
-            (ci.finlang_embedding <=> %(qvec)s::halfvec) as distance
+            (ci.finlang_embedding <=> %(qvec)s::halfvec) as distance,
+            cc.company_relevant, cc.ai_associated
         from content_index ci
         join content c using (content_id)
         join companies co using (company_id)
+        left join chunk_classifications cc on cc.chunk_id = ci.chunk_id
         where ci.finlang_embedding is not null
           and (%(company)s::text is null or co.name = %(company)s)
           and (%(type)s::text is null or c.type = %(type)s)
@@ -96,6 +98,8 @@ def search():
             "sub_type": row["sub_type"],
             "publication_date": row["publication_date"].isoformat() if row["publication_date"] else None,
             "distance": float(row["distance"]),
+            "company_relevant": row["company_relevant"],
+            "ai_relevant": (row["ai_associated"] or 0) > 0 if row["ai_associated"] is not None else None,
             "markdown": get_chunk_content(row["content_id"], row["type"], row["storage_path"], row["start_offset"], row["end_offset"]),
         }
 
@@ -107,6 +111,106 @@ def search():
         "bottom": bottom,
         "total_matched": len(rows),
         "total_filtered": total_filtered,
+    })
+
+
+AI_CATEGORY_LABELS = {
+    1: "AI Partnership", 2: "Operational Efficiencies", 3: "Restructuring",
+    4: "Clear Positive", 5: "Clear Negative", 6: "Product Roadmap",
+}
+AI_ASSOCIATED_LABELS = {0: "No", 1: "Core AI", 2: "Infra/Compute", 3: "Platform"}
+
+CLASSIFICATIONS_SQL = """
+    select cc.chunk_id, ci.content_id, ci.start_offset, ci.end_offset,
+           co.name as company_name, c.type, c.sub_type, c.publication_date, c.storage_path,
+           cc.company_relevant, cc.ai_associated, cc.ai_category,
+           cc.ai_materiality_score, cc.ai_saliency_score, cc.vader_compound, cc.round,
+           (cc.ai_category is not null) as llm_read
+    from chunk_classifications cc
+    join content_index ci using (chunk_id)
+    join content c using (content_id)
+    join companies co using (company_id)
+    where cc.ai_category is not null
+      and (%(company)s::text is null or co.name = %(company)s)
+      and (%(type)s::text is null or c.type = %(type)s)
+      and (%(sub_type)s::text is null or c.sub_type = %(sub_type)s)
+      and (%(ai_category)s::int is null or cc.ai_category = %(ai_category)s)
+      and (%(min_materiality)s::int is null or cc.ai_materiality_score >= %(min_materiality)s)
+      and (%(date_from)s::timestamptz is null or c.publication_date >= %(date_from)s)
+      and (%(date_to)s::timestamptz is null or c.publication_date <= %(date_to)s)
+    order by {sort_col} {sort_dir}
+"""
+
+CLASSIFICATIONS_COUNT_SQL = """
+    select count(*), count(*) filter (where cc.ai_category is not null)
+    from chunk_classifications cc
+    join content_index ci using (chunk_id)
+    join content c using (content_id)
+    join companies co using (company_id)
+    where (%(company)s::text is null or co.name = %(company)s)
+      and (%(type)s::text is null or c.type = %(type)s)
+      and (%(sub_type)s::text is null or c.sub_type = %(sub_type)s)
+      and (%(ai_category)s::int is null or cc.ai_category = %(ai_category)s)
+      and (%(min_materiality)s::int is null or cc.ai_materiality_score >= %(min_materiality)s)
+      and (%(date_from)s::timestamptz is null or c.publication_date >= %(date_from)s)
+      and (%(date_to)s::timestamptz is null or c.publication_date <= %(date_to)s)
+"""
+
+
+@app.route("/api/classifications", methods=["POST"])
+def classifications():
+    body = request.get_json()
+    sort_by = body.get("sort_by") or "ai_saliency_score"
+    if sort_by not in ("ai_saliency_score", "ai_materiality_score"):
+        sort_by = "ai_saliency_score"
+
+    params = {
+        "company": body.get("company") or None,
+        "type": body.get("type") or None,
+        "sub_type": body.get("sub_type") or None,
+        "ai_category": body.get("ai_category") or None,
+        "min_materiality": body.get("min_materiality") or None,
+        "date_from": body.get("date_from") or None,
+        "date_to": body.get("date_to") or None,
+    }
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(CLASSIFICATIONS_COUNT_SQL, params)
+            total_filtered, total_llm_read = cur.fetchone()
+
+            cur.execute(CLASSIFICATIONS_SQL.format(sort_col=sort_by, sort_dir="desc"), params)
+            columns = [d.name for d in cur.description]
+            top_rows = [dict(zip(columns, row)) for row in cur.fetchall()][:20]
+
+            cur.execute(CLASSIFICATIONS_SQL.format(sort_col=sort_by, sort_dir="asc"), params)
+            bottom_rows = [dict(zip(columns, row)) for row in cur.fetchall()][:20]
+
+    def serialize(row):
+        return {
+            "company_name": row["company_name"],
+            "type": row["type"],
+            "sub_type": row["sub_type"],
+            "publication_date": row["publication_date"].isoformat() if row["publication_date"] else None,
+            "llm_read": row["llm_read"],
+            "company_relevant": row["company_relevant"],
+            "ai_associated": row["ai_associated"],
+            "ai_associated_label": AI_ASSOCIATED_LABELS.get(row["ai_associated"]),
+            "ai_category": row["ai_category"],
+            "ai_category_label": AI_CATEGORY_LABELS.get(row["ai_category"]),
+            "ai_materiality_score": row["ai_materiality_score"],
+            "ai_saliency_score": row["ai_saliency_score"],
+            "vader_compound": float(row["vader_compound"]) if row["vader_compound"] is not None else None,
+            "round": row["round"],
+            "content": get_chunk_content(row["content_id"], row["type"], row["storage_path"], row["start_offset"], row["end_offset"]),
+        }
+
+    return jsonify({
+        "top": [serialize(r) for r in top_rows],
+        "bottom": [serialize(r) for r in bottom_rows],
+        "total_filtered": total_filtered,
+        "total_llm_read": total_llm_read,
+        "sort_by": sort_by,
     })
 
 
