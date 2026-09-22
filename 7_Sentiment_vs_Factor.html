@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sentiment vs AI Factor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.35.0/plotly.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0da; --text: #24231f;
+    --muted: #6b6a64; --accent: #a8560f; --accent-soft: #f4e6d8;
+    --code-bg: #f1efe9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.5rem 4rem; background: var(--bg); color: var(--text);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; line-height: 1.55;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.6rem; font-family: -apple-system, sans-serif; }
+  .methodology {
+    font-family: -apple-system, sans-serif; font-size: 0.85rem; color: var(--text);
+    background: var(--code-bg); border-left: 3px solid var(--accent); border-radius: 4px;
+    padding: 0.6rem 0.85rem; margin-bottom: 1.8rem;
+  }
+  h2.section-title {
+    font-family: -apple-system, sans-serif; font-size: 0.78rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--accent); margin: 2.2rem 0 0.8rem;
+  }
+  .chart-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem 1.2rem 0.5rem; margin-bottom: 1.2rem;
+  }
+  .chart-card h3 { font-size: 0.95rem; margin: 0 0 0.3rem; color: var(--text); font-family: -apple-system, sans-serif; font-weight: 600; }
+  .chart-div { width: 100%; height: 560px; }
+  .toggle-row { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; font-family: -apple-system, sans-serif; }
+  .toggle-row button {
+    font-family: inherit; font-size: 0.85rem; padding: 0.4rem 0.9rem; border: 1px solid var(--border);
+    background: var(--panel); color: var(--muted); cursor: pointer; border-radius: 6px;
+  }
+  .toggle-row button.active { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+  .corr-note { font-family: -apple-system, sans-serif; font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; }
+  .corr-note b { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Sentiment vs AI Factor</h1>
+  <div class="subtitle">AI Sentiment Signal (text-derived) plotted against per-company AI factor betas (market-derived), 9 companies.</div>
+  <div class="methodology">
+    <b>x-axis</b> &mdash; AI Sentiment Score: latest cross-section (2026-09-20), the ALL-corpus raw sentiment
+    z-scored against a fixed 2017&ndash;2022 baseline distribution. <b>y-axis</b> &mdash; AI factor beta: each
+    company's loading on an orthogonalized AI factor (Fama-French + sector controls removed via
+    Frisch-Waugh-Lovell), from <code>factor_model/ai_betas_v2.csv</code>. These two signals are built from
+    entirely independent inputs &mdash; one from LLM-classified earnings-call text, one from market prices
+    &mdash; so agreement between them is a genuine cross-check, not circular.
+  </div>
+
+  <div class="toggle-row" id="factor-toggle">
+    <button data-factor="AI_BASKET" class="active">AI_BASKET (hardware + AI platforms)</button>
+    <button data-factor="AI_ARTY">AI_ARTY (thematic ETF)</button>
+  </div>
+
+  <div class="chart-card">
+    <h3 id="chart-title">AI Sentiment Score vs AI_BASKET beta</h3>
+    <div class="chart-div" id="chart-scatter"></div>
+    <div class="corr-note" id="corr-note"></div>
+  </div>
+</div>
+
+<script>
+const TICKERS = ["ADBE", "CAT", "DELL", "INTC", "MU", "NVDA", "PG", "TEAM", "WM"];
+
+const SENTIMENT = {"ADBE": 2.1493, "CAT": -0.2295, "DELL": 2.0361, "INTC": 0.6777, "MU": 2.3224, "NVDA": 2.3608, "PG": -0.3787, "TEAM": 0.6034, "WM": -0.3449};
+
+const BETAS = {
+  AI_BASKET: {"NVDA": 0.8792, "MU": 0.8752, "DELL": 0.6783, "INTC": 0.3358, "CAT": 0.1421, "PG": -0.0142, "ADBE": -0.0198, "TEAM": -0.0700, "WM": -0.2615},
+  AI_ARTY:   {"MU": 1.4160, "NVDA": 0.6511, "DELL": 0.6172, "INTC": 0.7122, "CAT": 0.3054, "PG": -0.0092, "ADBE": -0.2489, "TEAM": -0.2118, "WM": -0.4110},
+};
+
+const TICKER_COLORS = {
+  ADBE: "#a8560f", CAT: "#4a7c59", DELL: "#2f6f9e", INTC: "#8b5aa8",
+  MU: "#c0392b", NVDA: "#1e8a6e", PG: "#6b6a64", TEAM: "#c98a2c", WM: "#5b5347",
+};
+
+function pearson(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((a, b) => a + b, 0) / n;
+  const my = ys.reduce((a, b) => a + b, 0) / n;
+  let num = 0, dx2 = 0, dy2 = 0;
+  for (let i = 0; i < n; i++) {
+    const dx = xs[i] - mx, dy = ys[i] - my;
+    num += dx * dy; dx2 += dx * dx; dy2 += dy * dy;
+  }
+  return num / Math.sqrt(dx2 * dy2);
+}
+
+function render(factorName) {
+  const xs = TICKERS.map(t => SENTIMENT[t]);
+  const ys = TICKERS.map(t => BETAS[factorName][t]);
+  const r = pearson(xs, ys);
+
+  const trace = {
+    x: xs, y: ys, text: TICKERS, mode: "markers+text",
+    textposition: "top center",
+    textfont: { family: "-apple-system, sans-serif", size: 12, color: "#24231f" },
+    marker: { size: 14, color: TICKERS.map(t => TICKER_COLORS[t]), line: { width: 1, color: "#ffffff" } },
+    hovertemplate: "<b>%{text}</b><br>Sentiment: %{x:.2f}<br>AI beta: %{y:.3f}<extra></extra>",
+  };
+
+  const layout = {
+    margin: { l: 55, r: 20, t: 10, b: 55 },
+    xaxis: { title: "AI Sentiment Score (z, latest cross-section)", zeroline: true, zerolinecolor: "#e2e0da", gridcolor: "#efeee9" },
+    yaxis: { title: `AI factor beta (${factorName})`, zeroline: true, zerolinecolor: "#e2e0da", gridcolor: "#efeee9" },
+    shapes: [
+      { type: "line", x0: 0, x1: 0, y0: -1, y1: 2, line: { color: "#e2e0da", width: 1, dash: "dot" } },
+    ],
+    font: { family: "-apple-system, sans-serif", color: "#24231f" },
+    paper_bgcolor: "#ffffff", plot_bgcolor: "#ffffff",
+    hovermode: "closest",
+  };
+
+  Plotly.newPlot("chart-scatter", [trace], layout, { responsive: true, displayModeBar: false });
+
+  document.getElementById("chart-title").textContent = `AI Sentiment Score vs ${factorName} beta`;
+  document.getElementById("corr-note").innerHTML = `Pearson correlation across the 9 companies: <b>r = ${r.toFixed(3)}</b>`;
+}
+
+document.querySelectorAll("#factor-toggle button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#factor-toggle button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render(btn.dataset.factor);
+  });
+});
+
+render("AI_BASKET");
+</script>
+</body>
+</html>

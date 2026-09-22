@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Factor Construction</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --border: #e2e0da; --text: #24231f;
+    --muted: #6b6a64; --accent: #a8560f; --accent-soft: #f4e6d8;
+    --code-bg: #f1efe9; --pos: #2f6f4e; --neg: #a8360f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.5rem 4rem; background: var(--bg); color: var(--text);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif; line-height: 1.55;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 1.2rem; font-family: -apple-system, sans-serif; }
+  .disclosure {
+    font-family: -apple-system, sans-serif; font-size: 0.85rem; color: var(--text);
+    background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 4px;
+    padding: 0.75rem 1rem; margin-bottom: 1.8rem;
+  }
+  .disclosure strong { color: var(--accent); }
+  h2.section-title {
+    font-family: -apple-system, sans-serif; font-size: 0.78rem; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--accent); margin: 2.2rem 0 0.8rem;
+  }
+  p { margin: 0.5rem 0 0.9rem; }
+  ul { margin: 0.4rem 0 0.9rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.35rem; }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.85em;
+    background: var(--code-bg); padding: 0.1rem 0.35rem; border-radius: 3px;
+  }
+  table {
+    width: 100%; border-collapse: collapse; font-family: -apple-system, sans-serif;
+    font-size: 0.88rem; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+  }
+  th, td { padding: 0.55rem 0.8rem; text-align: right; border-bottom: 1px solid var(--border); }
+  th:first-child, td:first-child { text-align: left; font-weight: 600; }
+  thead th { background: var(--code-bg); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.04em; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.pos { color: var(--pos); }
+  td.neg { color: var(--neg); }
+  .t-stat { color: var(--muted); font-size: 0.82em; }
+  .caption { font-family: -apple-system, sans-serif; font-size: 0.8rem; color: var(--muted); margin: 0.5rem 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Factor Construction</h1>
+  <div class="subtitle">Per-company AI beta, two independent AI factor constructions.</div>
+
+  <div class="disclosure">
+    <strong>AI generated.</strong> This report, and the underlying analysis code, was produced with the
+    assistance of an LLM due to time constraints. The reasoning, data, and decisions below are real
+    (drawn from the actual regressions run in <code>factor_model/</code>), but the write-up itself was
+    drafted by an AI assistant rather than composed from scratch by hand.
+  </div>
+
+  <h2 class="section-title">Final AI betas</h2>
+  <p>
+    Each company's return is regressed on the standard Fama-French controls (market, size, value,
+    profitability, investment, momentum) plus its own sector, plus an AI factor — orthogonalized against
+    all of the above first, so the beta below reflects AI exposure net of style and sector, not a
+    repackaged tech or momentum bet.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Ticker</th><th>AI_BASKET β</th><th></th><th>AI_ARTY β</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr><td>NVDA</td> <td class="pos">0.8792</td><td class="t-stat">t=21.89</td><td class="pos">0.6511</td><td class="t-stat">t=11.94</td></tr>
+      <tr><td>MU</td>   <td class="pos">0.8752</td><td class="t-stat">t=17.10</td><td class="pos">1.4160</td><td class="t-stat">t=21.93</td></tr>
+      <tr><td>DELL</td> <td class="pos">0.6783</td><td class="t-stat">t=12.03</td><td class="pos">0.6172</td><td class="t-stat">t=9.02</td></tr>
+      <tr><td>INTC</td> <td class="pos">0.3358</td><td class="t-stat">t=7.66</td><td class="pos">0.7122</td><td class="t-stat">t=10.51</td></tr>
+      <tr><td>CAT</td>  <td class="pos">0.1421</td><td class="t-stat">t=5.67</td><td class="pos">0.3054</td><td class="t-stat">t=8.88</td></tr>
+      <tr><td>PG</td>   <td>-0.0142</td><td class="t-stat">t=-0.98</td><td>-0.0092</td><td class="t-stat">t=-0.45</td></tr>
+      <tr><td>ADBE</td> <td>-0.0198</td><td class="t-stat">t=-0.74</td><td class="neg">-0.2489</td><td class="t-stat">t=-6.83</td></tr>
+      <tr><td>TEAM</td> <td>-0.0700</td><td class="t-stat">t=-1.20</td><td class="neg">-0.2118</td><td class="t-stat">t=-3.24</td></tr>
+      <tr><td>WM</td>   <td class="neg">-0.2615</td><td class="t-stat">t=-13.30</td><td class="neg">-0.4110</td><td class="t-stat">t=-14.74</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Sorted by AI_BASKET beta. Full detail (n_obs, p-values, R²) in <code>factor_model/ai_betas_v2.csv</code>.</p>
+  <p class="caption">
+    Note ADBE and TEAM: on this broadened basket their AI_BASKET beta is statistically
+    indistinguishable from zero (t=-0.74, t=-1.20), whereas AI_ARTY still shows both
+    significantly negative. That's a real divergence between the two constructions,
+    not resolved here.
+  </p>
+
+  <h2 class="section-title">Constructing the AI factor</h2>
+  <p>Two independent constructions were built and compared side by side, rather than committing to one:</p>
+  <ul>
+    <li><strong>AI_BASKET</strong> — an equal-weight, ex-universe basket of 10 names, excess of the market
+    return. Started as 5 AI hardware/foundry names (AVGO, TSM, AMD, SMCI, ASML), then was deliberately
+    broadened with 5 mega-cap AI software/platform names — GOOGL (DeepMind/Gemini/TPUs), META (Llama,
+    heavy AI capex), AMZN (AWS Bedrock/Trainium), CRM (Agentforce/Einstein), NOW (AI Platform/Now
+    Assist) — after the hardware-only version was flagged as too narrow a read on "AI." AI-native
+    software names (PLTR, SNOW) were considered and deliberately excluded: both IPO'd 2020+, and since
+    the basket requires every name to have data on every day, including either would have pushed the
+    whole basket's usable history from 2009 to ~2020, cutting the sample by more than a decade. Chosen
+    over a single ETF so the factor's ingredients are known and inspectable rather than opaque fund
+    holdings.</li>
+    <li><strong>AI_ARTY</strong> — the iShares Future AI &amp; Tech ETF (ARTY, formerly IRBO), excess of the
+    market return. A real, third-party-constructed thematic instrument, kept alongside AI_BASKET as an
+    independent check rather than a replacement for it.</li>
+  </ul>
+  <p>
+    Both are deliberately price/holdings-based, not text-derived — this keeps the factor independent
+    of the text-based AI Sentiment Signal built elsewhere in this project, so the two can later be
+    compared without circularity.
+  </p>
+
+  <h2 class="section-title">Stripping out universe names</h2>
+  <p>
+    Every name in AI_BASKET is explicitly chosen from <em>outside</em> our 9-company universe — none of
+    ADBE, CAT, DELL, INTC, MU, NVDA, PG, TEAM, or WM appear in the basket. This was a deliberate decision:
+    if a universe company were itself a basket ingredient, its own AI beta would be partly mechanical
+    (regressing a stock against a factor that contains that same stock) rather than a genuine external
+    read on AI exposure. AI_ARTY does not have this guarantee — it holds NVDA (~4.9%) and MU (~4.6%) as
+    real fund positions — which is exactly why AI_BASKET is retained as the cleaner comparison for those
+    two names rather than relying on AI_ARTY alone.
+  </p>
+
+  <h2 class="section-title">Sector cleaning — a known trade-off</h2>
+  <p>
+    Each company's AI factor is orthogonalized against its own sector benchmark before its beta is read
+    (software names against IGV, semiconductors/hardware against a custom ex-universe tech basket,
+    industrials against XLI, staples against XLP) — so a company's AI beta isn't just its sector beta in
+    disguise. This was a deliberate choice over using one shared sector control for every company, since
+    stripping an irrelevant sector (e.g. software) out of the AI factor before testing an industrial name
+    would only discard signal for no reason.
+  </p>
+  <p>
+    The trade-off, acknowledged here rather than glossed over: because the orthogonalization is re-run
+    per company, the "AI factor" used isn't literally identical across all 9 regressions — each company
+    sees a slightly different, company-specific residual of the same underlying factor. This is the
+    standard way to do this kind of per-company control, but it does mean the betas above are loadings
+    on 9 related, not 9 numerically identical, versions of the AI factor.
+  </p>
+</div>
+</body>
+</html>
